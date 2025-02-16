@@ -1,6 +1,5 @@
 [workspace]
 members = [
-  "minhtml",
   "minify-html-common",
   "minify-html-onepass",
   "minify-html",
