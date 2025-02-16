@@ -20,10 +20,6 @@ pub struct Cfg {
     pub keep_ssi_comments: bool,
     /// Minify DOCTYPEs. Minified DOCTYPEs may not be spec compliant, but will still be parsed correctly by almost all browsers.
     pub minify_doctype: bool,
-    /// When `{{`, `{#`, or `{%` are seen in content, all source code until the subsequent matching closing `}}`, `#}`, or `%}` respectively gets piped through untouched.
-    pub preserve_brace_template_syntax: bool,
-    /// When `<%` is seen in content, all source code until the subsequent matching closing `%>` gets piped through untouched.
-    pub preserve_chevron_percent_template_syntax: bool,
     /// Remove all bangs.
     pub remove_bangs: bool,
     /// Remove all processing instructions.
