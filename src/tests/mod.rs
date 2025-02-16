@@ -2,13 +2,14 @@ mod helpers;
 
 use std::str::from_utf8;
 
+#[cfg(feature = "css")]
+use crate::tests::helpers::create_common_css_test_data;
+#[cfg(feature = "js")]
+use crate::tests::helpers::create_common_js_test_data;
 use crate::{
     cfg::Cfg,
     minify,
-    tests::helpers::{
-        create_common_css_test_data, create_common_js_test_data,
-        create_common_noncompliant_test_data, create_common_test_data,
-    },
+    tests::helpers::{create_common_noncompliant_test_data, create_common_test_data},
 };
 
 pub fn eval_with_cfg(src: &'static [u8], expected: &'static [u8], cfg: &Cfg) {
@@ -22,11 +23,13 @@ pub fn eval_with_noncompliant(src: &'static [u8], expected: &'static [u8]) {
     eval_with_cfg(src, expected, &cfg)
 }
 
+#[cfg(feature = "js")]
 pub fn eval_with_js_min(src: &'static [u8], expected: &'static [u8]) -> () {
     let cfg = Cfg::new();
     eval_with_cfg(src, expected, &cfg);
 }
 
+#[cfg(feature = "css")]
 pub fn eval_with_css_min(src: &'static [u8], expected: &'static [u8]) -> () {
     let cfg = Cfg::new();
     eval_with_cfg(src, expected, &cfg);
@@ -52,6 +55,7 @@ fn test_common() {
     for (a, b) in create_common_noncompliant_test_data() {
         eval_with_noncompliant(a, b);
     }
+    #[cfg(feature = "css")]
     for (a, b) in create_common_css_test_data() {
         eval_with_css_min(a, b);
     }
@@ -191,6 +195,7 @@ fn test_viewport_attr_minification() {
 }
 
 #[test]
+#[cfg(feature = "css")]
 fn test_style_attr_minification() {
     eval_with_css_min(
         br#"<div style="color: yellow;"></div>"#,

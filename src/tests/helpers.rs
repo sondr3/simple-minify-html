@@ -391,15 +391,18 @@ pub fn create_common_test_data() -> HashMap<&'static [u8], &'static [u8]> {
 
     */
     // comments removal
-    t.insert(
-        b"<pre>a <!-- akd--sj\n <!-- \t\0f--ajk--df->lafj -->  b</pre>",
-        b"<pre>a   b</pre>",
-    );
-    t.insert(b"&a<!-- akd--sj\n <!-- \t\0f--ajk--df->lafj -->mp", b"&amp");
-    t.insert(
-        b"<script><!-- akd--sj\n <!-- \t\0f--ajk--df->lafj --></script>",
-        b"<script></script>",
-    );
+    #[cfg(feature = "js")]
+    {
+        t.insert(
+            b"<pre>a <!-- akd--sj\n <!-- \t\0f--ajk--df->lafj -->  b</pre>",
+            b"<pre>a   b</pre>",
+        );
+        t.insert(b"&a<!-- akd--sj\n <!-- \t\0f--ajk--df->lafj -->mp", b"&amp");
+        t.insert(
+            b"<script><!-- akd--sj\n <!-- \t\0f--ajk--df->lafj --></script>",
+            b"<script></script>",
+        );
+    }
 
     // processing instructions
     t.insert(b"<?php hello??? >>  ?>", b"<?php hello??? >>  ?>");
@@ -418,6 +421,7 @@ pub fn create_common_test_data() -> HashMap<&'static [u8], &'static [u8]> {
     t
 }
 
+#[cfg(feature = "css")]
 pub fn create_common_css_test_data() -> HashMap<&'static [u8], &'static [u8]> {
     let mut t = HashMap::<&'static [u8], &'static [u8]>::new();
 
@@ -430,6 +434,7 @@ pub fn create_common_css_test_data() -> HashMap<&'static [u8], &'static [u8]> {
     t
 }
 
+#[cfg(feature = "js")]
 pub fn create_common_js_test_data() -> HashMap<&'static [u8], &'static [u8]> {
     let mut t = HashMap::<&'static [u8], &'static [u8]>::new();
 
