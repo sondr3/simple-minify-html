@@ -330,9 +330,7 @@ fn gen_codepoints_rs() -> String {
 
       fn index(&self, c: u8) -> &Self::Output {
         // `c` is definitely below 256 so it's always safe to directly index table without checking.
-        unsafe {
-          self.table.get_unchecked(c as usize)
-        }
+        &self.table[c as usize]
       }
     }
   "#
