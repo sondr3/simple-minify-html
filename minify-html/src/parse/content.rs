@@ -1,7 +1,7 @@
 use std::sync::LazyLock;
 
 use aho_corasick::{AhoCorasick, AhoCorasickBuilder, AhoCorasickKind, MatchKind};
-use minify_html_common::{
+use simple_minify_html_common::{
     gen::codepoints::TAG_NAME_CHAR,
     spec::tag::{
         ns::Namespace,

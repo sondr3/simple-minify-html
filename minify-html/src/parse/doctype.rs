@@ -1,5 +1,5 @@
 use memchr::memchr;
-use minify_html_common::gen::codepoints::WHITESPACE;
+use simple_minify_html_common::gen::codepoints::WHITESPACE;
 
 use crate::{ast::NodeData, parse::Code};
 

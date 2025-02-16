@@ -1,5 +1,5 @@
 use ahash::AHashMap;
-use minify_html_common::spec::tag::{ns::Namespace, EMPTY_SLICE};
+use simple_minify_html_common::spec::tag::{ns::Namespace, EMPTY_SLICE};
 
 use crate::{
     ast::{AttrVal, ElementClosingTag, NodeData},

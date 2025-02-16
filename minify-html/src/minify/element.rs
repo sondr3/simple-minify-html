@@ -1,5 +1,5 @@
 use ahash::AHashMap;
-use minify_html_common::spec::tag::{
+use simple_minify_html_common::spec::tag::{
     ns::Namespace,
     omission::{can_omit_as_before, can_omit_as_last_node},
 };

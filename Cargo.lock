@@ -474,35 +474,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
 
 [[package]]
-name = "minify-html"
-version = "0.15.0"
-dependencies = [
- "ahash 0.8.11",
- "aho-corasick",
- "lightningcss",
- "memchr",
- "minify-html-common",
- "oxc_allocator",
- "oxc_codegen",
- "oxc_mangler",
- "oxc_minifier",
- "oxc_parser",
- "oxc_span",
-]
-
-[[package]]
-name = "minify-html-common"
-version = "0.0.2"
-dependencies = [
- "ahash 0.8.11",
- "aho-corasick",
- "itertools 0.12.1",
- "memchr",
- "serde",
- "serde_json",
-]
-
-[[package]]
 name = "nonmax"
 version = "0.5.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1226,6 +1197,35 @@ name = "simdutf8"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e3a9fe34e3e7a50316060351f37187a3f546bce95496156754b601a5fa71b76e"
+
+[[package]]
+name = "simple-minify-html"
+version = "0.15.0"
+dependencies = [
+ "ahash 0.8.11",
+ "aho-corasick",
+ "lightningcss",
+ "memchr",
+ "oxc_allocator",
+ "oxc_codegen",
+ "oxc_mangler",
+ "oxc_minifier",
+ "oxc_parser",
+ "oxc_span",
+ "simple-minify-html-common",
+]
+
+[[package]]
+name = "simple-minify-html-common"
+version = "0.0.2"
+dependencies = [
+ "ahash 0.8.11",
+ "aho-corasick",
+ "itertools 0.12.1",
+ "memchr",
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "siphasher"

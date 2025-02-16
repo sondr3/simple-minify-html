@@ -2,8 +2,8 @@
 
 use std::io::Write;
 
-use minify_html_common::spec::tag::{ns::Namespace, EMPTY_SLICE};
 use parse::ParseOpts;
+use simple_minify_html_common::spec::tag::{ns::Namespace, EMPTY_SLICE};
 
 pub use crate::cfg::Cfg;
 use crate::{

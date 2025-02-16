@@ -1,6 +1,6 @@
 use std::str::from_utf8;
 
-use minify_html_common::tests::{
+use simple_minify_html_common::tests::{
     create_common_css_test_data, create_common_noncompliant_test_data, create_common_test_data,
 };
 

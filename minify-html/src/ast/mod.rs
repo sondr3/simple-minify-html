@@ -4,7 +4,7 @@ use std::{
 };
 
 use ahash::AHashMap;
-use minify_html_common::spec::tag::ns::Namespace;
+use simple_minify_html_common::spec::tag::ns::Namespace;
 
 pub mod c14n;
 

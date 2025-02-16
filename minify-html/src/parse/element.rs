@@ -4,7 +4,7 @@ use std::{
 };
 
 use ahash::AHashMap;
-use minify_html_common::{
+use simple_minify_html_common::{
     gen::codepoints::{
         ATTR_QUOTE, DOUBLE_QUOTE, NOT_UNQUOTED_ATTR_VAL_CHAR, SINGLE_QUOTE, TAG_NAME_CHAR,
         WHITESPACE, WHITESPACE_OR_SLASH, WHITESPACE_OR_SLASH_OR_EQUALS_OR_RIGHT_CHEVRON,

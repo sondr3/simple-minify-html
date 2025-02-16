@@ -1,5 +1,5 @@
 [package]
-name = "minify-html-common"
+name = "simple-minify-html-common"
 description = "Common code and data for minify-html*"
 license = "MIT"
 homepage = "https://github.com/sondr3/simple-minify-html"

@@ -3,7 +3,7 @@ use std::str::from_utf8;
 
 #[cfg(feature = "css")]
 use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleSheet};
-use minify_html_common::whitespace::trimmed;
+use simple_minify_html_common::whitespace::trimmed;
 
 use crate::cfg::Cfg;
 

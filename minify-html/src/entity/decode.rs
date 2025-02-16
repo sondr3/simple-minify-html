@@ -16,7 +16,7 @@
 use std::char::from_u32;
 
 use memchr::memchr;
-use minify_html_common::{
+use simple_minify_html_common::{
     gen::{
         codepoints::{
             Lookup, ALPHANUMERIC_OR_EQUALS, DIGIT, HEX_DIGIT, LOWER_HEX_ALPHA, UPPER_HEX_ALPHA,

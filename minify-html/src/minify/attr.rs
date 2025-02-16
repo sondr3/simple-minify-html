@@ -5,7 +5,7 @@ use std::sync::LazyLock;
 use aho_corasick::{AhoCorasickBuilder, AhoCorasickKind, MatchKind};
 #[cfg(feature = "css")]
 use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleAttribute};
-use minify_html_common::{
+use simple_minify_html_common::{
     gen::{attrs::ATTRS, codepoints::DIGIT},
     pattern::Replacer,
     spec::{script::JAVASCRIPT_MIME_TYPES, tag::ns::Namespace},
