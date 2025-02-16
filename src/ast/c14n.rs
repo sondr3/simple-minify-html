@@ -149,9 +149,6 @@ pub fn c14n_serialise_ast<T: Write>(out: &mut T, node: &NodeData) -> std::io::Re
         NodeData::Text { value } => {
             out.write_all(&TEXT_REPLACER.replace_all(value))?;
         }
-        NodeData::Opaque { raw_source } => {
-            out.write_all(raw_source)?;
-        }
     };
     Ok(())
 }

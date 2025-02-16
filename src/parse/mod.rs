@@ -13,16 +13,9 @@ mod tests;
 pub mod textarea;
 pub mod title;
 
-#[derive(Default, Clone, Debug)]
-pub struct ParseOpts {
-    pub treat_brace_as_opaque: bool,
-    pub treat_chevron_percent_as_opaque: bool,
-}
-
 pub struct Code<'c> {
     code: &'c [u8],
     next: usize,
-    pub(crate) opts: ParseOpts,
 
     pub seen_html_open: bool,
     pub seen_head_open: bool,
@@ -34,11 +27,10 @@ pub struct Code<'c> {
 pub struct Checkpoint(usize);
 
 impl Code<'_> {
-    pub fn new_with_opts(code: &[u8], opts: ParseOpts) -> Code {
+    pub fn new_with_opts(code: &[u8]) -> Code {
         Code {
             code,
             next: 0,
-            opts,
             seen_html_open: false,
             seen_head_open: false,
             seen_head_close: false,
@@ -47,7 +39,7 @@ impl Code<'_> {
     }
 
     pub fn new(code: &[u8]) -> Code {
-        Code::new_with_opts(code, ParseOpts::default())
+        Code::new_with_opts(code)
     }
 
     pub fn as_slice(&self) -> &[u8] {

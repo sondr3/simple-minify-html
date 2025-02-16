@@ -34,12 +34,6 @@ enum ContentType {
     OmittedClosingTag,
     OpeningTag,
     Text,
-    // Pebble, Mustache, Django, Go, Jinja, Twix, Nunjucks, Handlebars, Liquid.
-    OpaqueBraceBrace,
-    OpaqueBraceHash,
-    OpaqueBracePercent,
-    // Sailfish, JSP, EJS, ERB.
-    OpaqueChevronPercent,
 }
 
 fn maybe_ignore_html_head_body(
@@ -89,10 +83,7 @@ fn maybe_ignore_html_head_body(
     }
 }
 
-fn build_content_type_matcher(
-    with_opaque_brace: bool,
-    with_opaque_chevron_percent: bool,
-) -> (AhoCorasick, Vec<ContentType>) {
+fn build_content_type_matcher() -> (AhoCorasick, Vec<ContentType>) {
     let mut patterns = Vec::<Vec<u8>>::new();
     let mut types = Vec::<ContentType>::new();
 
@@ -120,22 +111,6 @@ fn build_content_type_matcher(
     patterns.push(b"<!--".to_vec());
     types.push(ContentType::Comment);
 
-    if with_opaque_brace {
-        patterns.push(b"{{".to_vec());
-        types.push(ContentType::OpaqueBraceBrace);
-
-        patterns.push(b"{#".to_vec());
-        types.push(ContentType::OpaqueBraceHash);
-
-        patterns.push(b"{%".to_vec());
-        types.push(ContentType::OpaqueBracePercent);
-    };
-
-    if with_opaque_chevron_percent {
-        patterns.push(b"<%".to_vec());
-        types.push(ContentType::OpaqueChevronPercent);
-    };
-
     (
         AhoCorasickBuilder::new()
             .ascii_case_insensitive(true)
@@ -149,38 +124,7 @@ fn build_content_type_matcher(
 }
 
 static CONTENT_TYPE_MATCHER: LazyLock<(AhoCorasick, Vec<ContentType>)> =
-    LazyLock::new(|| build_content_type_matcher(false, false));
-static CONTENT_TYPE_MATCHER_OPAQUE_BRACE: LazyLock<(AhoCorasick, Vec<ContentType>)> =
-    LazyLock::new(|| build_content_type_matcher(true, false));
-static CONTENT_TYPE_MATCHER_OPAQUE_CP: LazyLock<(AhoCorasick, Vec<ContentType>)> =
-    LazyLock::new(|| build_content_type_matcher(false, true));
-static CONTENT_TYPE_MATCHER_OPAQUE_BRACE_CP: LazyLock<(AhoCorasick, Vec<ContentType>)> =
-    LazyLock::new(|| build_content_type_matcher(true, true));
-
-static CLOSING_BRACE_BRACE: LazyLock<AhoCorasick> = LazyLock::new(|| {
-    AhoCorasickBuilder::new()
-        .kind(Some(AhoCorasickKind::DFA))
-        .build(["}}"])
-        .unwrap()
-});
-static CLOSING_BRACE_HASH: LazyLock<AhoCorasick> = LazyLock::new(|| {
-    AhoCorasickBuilder::new()
-        .kind(Some(AhoCorasickKind::DFA))
-        .build(["#}"])
-        .unwrap()
-});
-static CLOSING_BRACE_PERCENT: LazyLock<AhoCorasick> = LazyLock::new(|| {
-    AhoCorasickBuilder::new()
-        .kind(Some(AhoCorasickKind::DFA))
-        .build(["%}"])
-        .unwrap()
-});
-static CLOSING_CHEVRON_PERCENT: LazyLock<AhoCorasick> = LazyLock::new(|| {
-    AhoCorasickBuilder::new()
-        .kind(Some(AhoCorasickKind::DFA))
-        .build(["%>"])
-        .unwrap()
-});
+    LazyLock::new(build_content_type_matcher);
 
 pub struct ParsedContent {
     pub children: Vec<NodeData>,
@@ -197,15 +141,7 @@ pub fn parse_content(
     // We assume the closing tag has been omitted until we see one explicitly before EOF (or it has been omitted as per the spec).
     let mut closing_tag_omitted = true;
     let mut nodes = Vec::<NodeData>::new();
-    let matcher = match (
-        code.opts.treat_brace_as_opaque,
-        code.opts.treat_chevron_percent_as_opaque,
-    ) {
-        (false, false) => &CONTENT_TYPE_MATCHER,
-        (true, false) => &CONTENT_TYPE_MATCHER_OPAQUE_BRACE,
-        (false, true) => &CONTENT_TYPE_MATCHER_OPAQUE_CP,
-        (true, true) => &CONTENT_TYPE_MATCHER_OPAQUE_BRACE_CP,
-    };
+    let matcher = &CONTENT_TYPE_MATCHER;
     loop {
         let (text_len, mut typ) = match matcher.0.find(code.as_slice()) {
             Some(m) => (m.start(), matcher.1[m.pattern()]),
@@ -266,25 +202,6 @@ pub fn parse_content(
                 break;
             }
             IgnoredTag => drop(parse_tag(code)),
-            e
-            @ (OpaqueBraceBrace | OpaqueBraceHash | OpaqueBracePercent | OpaqueChevronPercent) => {
-                let closing_matcher = match e {
-                    OpaqueBraceBrace => &CLOSING_BRACE_BRACE,
-                    OpaqueBraceHash => &CLOSING_BRACE_HASH,
-                    OpaqueBracePercent => &CLOSING_BRACE_PERCENT,
-                    OpaqueChevronPercent => &CLOSING_CHEVRON_PERCENT,
-                    _ => unreachable!(),
-                };
-                // We must skip past opening as otherwise something like `{%}` matches both opening and closing delimiters.
-                let len = match closing_matcher.find(&code.as_slice()[2..]) {
-                    // It's probably safer to assume it's implicitly closed by EOF instead of reinterpreting as literal HTML text and possibly mangling template code.
-                    Some(m) => m.end(),
-                    None => code.rem(),
-                };
-                nodes.push(NodeData::Opaque {
-                    raw_source: code.copy_and_shift(len),
-                });
-            }
         };
     }
     ParsedContent {

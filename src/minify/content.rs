@@ -156,7 +156,7 @@ pub fn minify_content(
             NodeData::RcdataContent { typ, text } => minify_rcdata(cfg, out, typ, &text),
             NodeData::ScriptOrStyleContent { code, lang: _ } if code.is_empty() => {}
             NodeData::ScriptOrStyleContent { code, lang } => match lang {
-                ScriptOrStyleLang::CSS => minify_css(cfg, out, &code),
+                ScriptOrStyleLang::CSS => minify_css(out, &code),
                 ScriptOrStyleLang::Data => out.extend_from_slice(&code),
                 ScriptOrStyleLang::JS => minify_js(out, &code),
                 ScriptOrStyleLang::JSModule => minify_js(out, &code),
@@ -170,7 +170,6 @@ pub fn minify_content(
                 };
                 out.extend_from_slice(&min);
             }
-            NodeData::Opaque { raw_source } => out.extend_from_slice(&raw_source),
         };
     }
 }

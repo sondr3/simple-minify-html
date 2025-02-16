@@ -106,10 +106,6 @@ pub enum NodeData {
     Text {
         value: Vec<u8>,
     },
-    // Usually templating syntax, including any opening and closing delimiters.
-    Opaque {
-        raw_source: Vec<u8>,
-    },
 }
 
 impl Debug for NodeData {
@@ -169,10 +165,6 @@ impl Debug for NodeData {
                 .field("lang", lang)
                 .finish(),
             NodeData::Text { value } => f.write_str(from_utf8(value).unwrap()),
-            NodeData::Opaque { raw_source } => f
-                .debug_struct("Opaque")
-                .field("raw_source", &from_utf8(raw_source).unwrap().to_string())
-                .finish(),
         }
     }
 }
