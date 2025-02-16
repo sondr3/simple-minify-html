@@ -96,7 +96,7 @@ fn parse_entity(code: &[u8], in_attr_val: bool) -> ParsedEntity {
                 // Skip past '&#'. Note that match_len is 3 as it matches '&#[0-9]'.
                 2,
                 DIGIT,
-                |value, c| value.wrapping_mul(10).wrapping_add((c - b'0') as u32),
+                |value, c| value.wrapping_mul(10).wrapping_add(u32::from(c - b'0')),
                 7,
             ),
             EntityType::Hex => parse_numeric_entity(
@@ -106,9 +106,9 @@ fn parse_entity(code: &[u8], in_attr_val: bool) -> ParsedEntity {
                 HEX_DIGIT,
                 |value, c| {
                     value.wrapping_mul(16).wrapping_add(match c {
-                        c if DIGIT[c] => (c - b'0') as u32,
-                        c if LOWER_HEX_ALPHA[c] => 10 + (c - b'a') as u32,
-                        c if UPPER_HEX_ALPHA[c] => 10 + (c - b'A') as u32,
+                        c if DIGIT[c] => u32::from(c - b'0'),
+                        c if LOWER_HEX_ALPHA[c] => 10 + u32::from(c - b'a'),
+                        c if UPPER_HEX_ALPHA[c] => 10 + u32::from(c - b'A'),
                         _ => unreachable!(),
                     })
                 },

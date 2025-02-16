@@ -41,6 +41,7 @@ mod whitespace;
 /// let minified = minify(&code, &cfg);
 /// assert_eq!(minified, b"<p>Hello, world!".to_vec());
 /// ```
+#[must_use]
 pub fn minify(src: &[u8], cfg: &Cfg) -> Vec<u8> {
     let mut code = Code::new_with_opts(src);
     let parsed = parse_content(&mut code, Namespace::Html, EMPTY_SLICE, EMPTY_SLICE);
@@ -57,7 +58,7 @@ pub fn minify(src: &[u8], cfg: &Cfg) -> Vec<u8> {
     out
 }
 
-pub fn canonicalise<T: Write>(out: &mut T, src: &[u8]) -> std::io::Result<()> {
+pub fn canonicalize<T: Write>(out: &mut T, src: &[u8]) -> std::io::Result<()> {
     let mut code = Code::new(src);
     let parsed = parse_content(&mut code, Namespace::Html, EMPTY_SLICE, EMPTY_SLICE);
     for c in parsed.children {

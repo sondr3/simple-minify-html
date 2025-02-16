@@ -71,14 +71,14 @@ pub fn minify_element(
         out.push(b'<');
         out.extend_from_slice(tag_name);
 
-        for (name, value) in quoted.iter() {
+        for (name, value) in &quoted {
             out.push(b' ');
             out.extend_from_slice(name);
             out.push(b'=');
             debug_assert!(value.quoted());
             value.out(out);
         }
-        for (name, value) in unquoted.iter() {
+        for (name, value) in &unquoted {
             out.push(b' ');
             out.extend_from_slice(name);
             if let AttrMinified::Value(v) = value {

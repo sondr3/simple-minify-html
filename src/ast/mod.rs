@@ -52,7 +52,7 @@ impl PartialEq for AttrVal {
 
 impl Eq for AttrVal {}
 
-#[derive(Eq, PartialEq, Debug)]
+#[derive(Eq, PartialEq, Debug, Copy, Clone)]
 pub enum RcdataContentType {
     Textarea,
     Title,

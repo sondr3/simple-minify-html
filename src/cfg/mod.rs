@@ -19,6 +19,7 @@ pub struct Cfg {
 }
 
 impl Cfg {
+    #[must_use]
     pub fn new() -> Cfg {
         Cfg::default()
     }

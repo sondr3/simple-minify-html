@@ -27,7 +27,7 @@ pub struct Code<'c> {
 pub struct Checkpoint(usize);
 
 impl Code<'_> {
-    pub fn new_with_opts(code: &[u8]) -> Code {
+    pub const fn new_with_opts(code: &[u8]) -> Code {
         Code {
             code,
             next: 0,
@@ -46,7 +46,7 @@ impl Code<'_> {
         &self.code[self.next..]
     }
 
-    pub fn take_checkpoint(&self) -> Checkpoint {
+    pub const fn take_checkpoint(&self) -> Checkpoint {
         Checkpoint(self.next)
     }
 
@@ -149,7 +149,7 @@ impl Code<'_> {
         last
     }
 
-    pub fn rem(&self) -> usize {
+    pub const fn rem(&self) -> usize {
         self.code.len() - self.next
     }
 }

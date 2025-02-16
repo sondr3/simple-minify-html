@@ -99,7 +99,7 @@ pub fn c14n_serialise_ast<T: Write>(out: &mut T, node: &NodeData) -> std::io::Re
             out.write_all(name)?;
             let mut attrs_sorted = attributes.iter().collect::<Vec<_>>();
             attrs_sorted.sort_unstable_by(|a, b| a.0.cmp(b.0));
-            for (name, value) in attrs_sorted.iter() {
+            for (name, value) in &attrs_sorted {
                 out.write_all(b" ")?;
                 out.write_all(name)?;
                 if !value.value.is_empty() {

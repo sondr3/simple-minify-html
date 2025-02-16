@@ -55,8 +55,7 @@ fn gen_attr_min_struct(
 ) -> String {
     let default_value = default_value
         .as_ref()
-        .map(|v| format!(r#"Some(b"{v}")"#))
-        .unwrap_or_else(|| "None".to_string());
+        .map_or_else(|| "None".to_string(), |v| format!(r#"Some(b"{v}")"#));
     format!(
         r#"
       AttributeMinification {{
@@ -126,7 +125,7 @@ fn gen_attrs_rs(html_data: &HtmlData) -> String {
       let mut m = FxHashMap::<&'static [u8], ByNamespace>::default();
   "#.to_string();
 
-    for (attr_name, namespaces) in html_data.attributes.iter() {
+    for (attr_name, namespaces) in &html_data.attributes {
         write!(&mut code, r#"m.insert(b"{attr_name}", ByNamespace {{"#).unwrap();
         {
             for ns in [HtmlDataNamespace::Html, HtmlDataNamespace::Svg] {
@@ -384,12 +383,12 @@ struct TrieBuilder {
 }
 
 impl TrieBuilder {
-    pub fn add(&mut self, pattern: Vec<CodePoints>, value: String) {
+    pub fn add(&mut self, pattern: Vec<CodePoints>, value: &str) {
         let mut cur = vec![self.root.clone()];
         for cp in pattern {
             let mut next = vec![];
             for c in cp.iter() {
-                for cur_node in cur.iter() {
+                for cur_node in &cur {
                     let mut cur_node_mut = cur_node.borrow_mut();
                     let new_child = cur_node_mut.children.entry(c).or_default();
                     next.push(new_child.clone());
@@ -398,7 +397,7 @@ impl TrieBuilder {
             cur = next;
         }
         for n in cur {
-            n.borrow_mut().value = Some(value.clone());
+            n.borrow_mut().value = Some(value.to_string());
         }
     }
 
@@ -413,14 +412,14 @@ impl TrieBuilder {
         }
         impl State {
             // Generate the code for a node's variable name and value, and return the name.
-            fn generate_node(&mut self, node: Rc<RefCell<TrieNode>>) -> String {
+            fn generate_node(&mut self, node: &Rc<RefCell<TrieNode>>) -> String {
                 // Only generate defined children to cut down on size of array, which would otherwise
                 // bog down compile time and binary size for large trees with lots of nodes.
                 // If array is empty, just use zero.
-                let first_idx = node.borrow().children.keys().cloned().min().unwrap_or(0);
+                let first_idx = node.borrow().children.keys().copied().min().unwrap_or(0);
                 let children = (first_idx..=255)
                     .map(|c| match node.borrow().children.get(&c) {
-                        Some(c) => format!("Some({})", self.generate_node(c.clone())),
+                        Some(c) => format!("Some({})", self.generate_node(c)),
                         None => "None".to_string(),
                     })
                     .join(", ");
@@ -429,8 +428,8 @@ impl TrieBuilder {
                     .borrow()
                     .value
                     .as_ref()
-                    .map(|v| format!("Some({v})"))
-                    .unwrap_or_else(|| "None".to_string());
+                    .as_ref()
+                    .map_or_else(|| "None".to_string(), |v| format!("Some({v})"));
                 let var_value = format!(
                     r#"
             &crate::pattern::TrieNode {{
@@ -462,7 +461,7 @@ impl TrieBuilder {
             value_type,
             ..Default::default()
         };
-        let root_name = s.generate_node(self.root);
+        let root_name = s.generate_node(&self.root);
         // Make root node public and use proper name.
         s.variables.join("\n\n").replace(
             &format!("static {root_name}"),
@@ -484,7 +483,7 @@ fn gen_entities_rs() -> String {
     let mut trie_builder = TrieBuilder::default();
     trie_builder.add(
         vec![c(b'&'), c(b'#'), (b'0'..=b'9').into()],
-        "EntityType::Dec".to_string(),
+        "EntityType::Dec",
     );
     trie_builder.add(
         vec![
@@ -493,7 +492,7 @@ fn gen_entities_rs() -> String {
             c(b'x'),
             CodePoints::new() + (b'0'..=b'9') + (b'a'..=b'f') + (b'A'..=b'F'),
         ],
-        "EntityType::Hex".to_string(),
+        "EntityType::Hex",
     );
     let mut shorter_encoded_entities = vec![];
     for (encoded, entity) in entities {
@@ -504,7 +503,7 @@ fn gen_entities_rs() -> String {
                 .iter()
                 .map(|&c| CodePoints::new() & c)
                 .collect_vec(),
-            format!("EntityType::Named({})", val),
+            &format!("EntityType::Named({})", val),
         );
         // We should encode if encoded is shorter than decoded.
         if encoded.len() < entity.characters.len() {

@@ -133,8 +133,7 @@ pub fn minify_content(
             NodeData::ScriptOrStyleContent { code, lang } => match lang {
                 ScriptOrStyleLang::CSS => minify_css(out, &code),
                 ScriptOrStyleLang::Data => out.extend_from_slice(&code),
-                ScriptOrStyleLang::JS => minify_js(out, &code),
-                ScriptOrStyleLang::JSModule => minify_js(out, &code),
+                ScriptOrStyleLang::JS | ScriptOrStyleLang::JSModule => minify_js(out, &code),
             },
             NodeData::Text { value } => {
                 let min = encode_entities(&value, false);
