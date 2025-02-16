@@ -23,14 +23,12 @@ pub fn eval_with_noncompliant(src: &'static [u8], expected: &'static [u8]) {
 }
 
 pub fn eval_with_js_min(src: &'static [u8], expected: &'static [u8]) -> () {
-    let mut cfg = Cfg::new();
-    cfg.minify_js = true;
+    let cfg = Cfg::new();
     eval_with_cfg(src, expected, &cfg);
 }
 
 pub fn eval_with_css_min(src: &'static [u8], expected: &'static [u8]) -> () {
-    let mut cfg = Cfg::new();
-    cfg.minify_css = true;
+    let cfg = Cfg::new();
     eval_with_cfg(src, expected, &cfg);
 }
 
