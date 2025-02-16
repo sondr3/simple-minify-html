@@ -17,7 +17,7 @@ pub fn minify_js(out: &mut Vec<u8>, code: &[u8]) {
     let allocator = Allocator::default();
     let source_type = SourceType::cjs();
     let code = std::str::from_utf8(code).expect("js contained invalid utf-8");
-    let minified = minify(&allocator, &code, source_type);
+    let minified = minify(&allocator, code, source_type);
     out.extend_from_slice(trimmed(minified.as_bytes()));
 }
 
