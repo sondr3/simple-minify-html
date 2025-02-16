@@ -31,7 +31,7 @@ mod tests;
 /// # Examples
 ///
 /// ```
-/// use minify_html::{Cfg, minify};
+/// use simple_minify_html::{Cfg, minify};
 ///
 /// let mut code: &[u8] = b"<p>  Hello, world!  </p>";
 /// let mut cfg = Cfg::new();

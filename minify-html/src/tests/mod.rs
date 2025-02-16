@@ -1,7 +1,8 @@
 use std::str::from_utf8;
 
 use simple_minify_html_common::tests::{
-    create_common_css_test_data, create_common_noncompliant_test_data, create_common_test_data,
+    create_common_css_test_data, create_common_js_test_data, create_common_noncompliant_test_data,
+    create_common_test_data,
 };
 
 use crate::{cfg::Cfg, minify};
@@ -52,10 +53,10 @@ fn test_common() {
     for (a, b) in create_common_css_test_data() {
         eval_with_css_min(a, b);
     }
-    // todo: remove
-    // for (a, b) in create_common_js_test_data() {
-    //     eval_with_js_min(a, b);
-    // }
+    #[cfg(feature = "js")]
+    for (a, b) in create_common_js_test_data() {
+        eval_with_js_min(a, b);
+    }
 }
 
 #[test]
