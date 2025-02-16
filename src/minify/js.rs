@@ -10,7 +10,8 @@ use oxc_minifier::{CompressOptions, Minifier, MinifierOptions};
 use oxc_parser::Parser;
 #[cfg(feature = "js")]
 use oxc_span::SourceType;
-use simple_minify_html_common::whitespace::trimmed;
+
+use crate::whitespace::trimmed;
 
 #[cfg(feature = "js")]
 pub fn minify_js(out: &mut Vec<u8>, code: &[u8]) {

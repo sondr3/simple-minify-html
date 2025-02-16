@@ -360,6 +360,7 @@ fn gen_codepoints_rs() -> String {
         write!(
             &mut code,
             r#"
+        #[allow(unused)]
         pub static {name}: &Lookup = &Lookup {{
           table: {:?},
         }};

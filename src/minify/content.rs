@@ -1,25 +1,23 @@
 use std::sync::LazyLock;
 
 use aho_corasick::{AhoCorasickBuilder, AhoCorasickKind, MatchKind};
-use simple_minify_html_common::{
-    gen::codepoints::TAG_NAME_CHAR,
-    pattern::Replacer,
-    spec::tag::{
-        ns::Namespace,
-        whitespace::{get_whitespace_minification_for_tag, WhitespaceMinification},
-    },
-    whitespace::{collapse_whitespace, is_all_whitespace, left_trim, right_trim},
-};
 
 use super::rcdata::minify_rcdata;
 use crate::{
     ast::{NodeData, ScriptOrStyleLang},
     cfg::Cfg,
     entity::encode::encode_entities,
+    gen::codepoints::TAG_NAME_CHAR,
     minify::{
         bang::minify_bang, comment::minify_comment, css::minify_css, doctype::minify_doctype,
         element::minify_element, instruction::minify_instruction, js::minify_js,
     },
+    pattern::Replacer,
+    spec::tag::{
+        ns::Namespace,
+        whitespace::{get_whitespace_minification_for_tag, WhitespaceMinification},
+    },
+    whitespace::{collapse_whitespace, is_all_whitespace, left_trim, right_trim},
 };
 
 fn build_optimal_chevron_replacer() -> Replacer {

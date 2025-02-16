@@ -3,23 +3,27 @@
 use std::io::Write;
 
 use parse::ParseOpts;
-use simple_minify_html_common::spec::tag::{ns::Namespace, EMPTY_SLICE};
 
 pub use crate::cfg::Cfg;
 use crate::{
     ast::c14n::c14n_serialise_ast,
     minify::content::minify_content,
     parse::{content::parse_content, Code},
+    spec::tag::{ns::Namespace, EMPTY_SLICE},
 };
 
 mod ast;
 mod cfg;
 mod entity;
+mod gen;
 mod minify;
 mod parse;
+mod pattern;
+mod spec;
 mod tag;
 #[cfg(test)]
 mod tests;
+mod whitespace;
 
 /// Minifies UTF-8 HTML code, represented as an array of bytes.
 ///

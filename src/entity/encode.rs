@@ -2,7 +2,8 @@ use std::sync::LazyLock;
 
 use aho_corasick::{AhoCorasick, AhoCorasickBuilder, AhoCorasickKind, MatchKind};
 use memchr::memchr;
-use simple_minify_html_common::{
+
+use crate::{
     gen::{
         codepoints::ALPHANUMERIC_OR_EQUALS,
         entities::{

@@ -4,20 +4,14 @@ use std::{
 };
 
 use ahash::AHashMap;
-use simple_minify_html_common::{
-    gen::codepoints::{
-        ATTR_QUOTE, DOUBLE_QUOTE, NOT_UNQUOTED_ATTR_VAL_CHAR, SINGLE_QUOTE, TAG_NAME_CHAR,
-        WHITESPACE, WHITESPACE_OR_SLASH, WHITESPACE_OR_SLASH_OR_EQUALS_OR_RIGHT_CHEVRON,
-    },
-    spec::{
-        script::JAVASCRIPT_MIME_TYPES,
-        tag::{ns::Namespace, void::VOID_TAGS},
-    },
-};
 
 use crate::{
     ast::{AttrVal, ElementClosingTag, NodeData, ScriptOrStyleLang},
     entity::decode::decode_entities,
+    gen::codepoints::{
+        ATTR_QUOTE, DOUBLE_QUOTE, NOT_UNQUOTED_ATTR_VAL_CHAR, SINGLE_QUOTE, TAG_NAME_CHAR,
+        WHITESPACE, WHITESPACE_OR_SLASH, WHITESPACE_OR_SLASH_OR_EQUALS_OR_RIGHT_CHEVRON,
+    },
     parse::{
         content::{parse_content, ParsedContent},
         script::parse_script_content,
@@ -25,6 +19,10 @@ use crate::{
         textarea::parse_textarea_content,
         title::parse_title_content,
         Code,
+    },
+    spec::{
+        script::JAVASCRIPT_MIME_TYPES,
+        tag::{ns::Namespace, void::VOID_TAGS},
     },
 };
 

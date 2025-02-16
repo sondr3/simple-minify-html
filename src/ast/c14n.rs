@@ -1,9 +1,11 @@
 use std::{io::Write, sync::LazyLock};
 
 use aho_corasick::{AhoCorasickBuilder, AhoCorasickKind, MatchKind};
-use simple_minify_html_common::pattern::Replacer;
 
-use crate::ast::{ElementClosingTag, NodeData};
+use crate::{
+    ast::{ElementClosingTag, NodeData},
+    pattern::Replacer,
+};
 
 static TEXT_REPLACER: LazyLock<Replacer> = LazyLock::new(|| {
     Replacer::new(

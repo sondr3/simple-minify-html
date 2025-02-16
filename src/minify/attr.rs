@@ -5,14 +5,15 @@ use std::sync::LazyLock;
 use aho_corasick::{AhoCorasickBuilder, AhoCorasickKind, MatchKind};
 #[cfg(feature = "css")]
 use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleAttribute};
-use simple_minify_html_common::{
+
+use crate::{
+    entity::encode::encode_entities,
     gen::{attrs::ATTRS, codepoints::DIGIT},
     pattern::Replacer,
     spec::{script::JAVASCRIPT_MIME_TYPES, tag::ns::Namespace},
     whitespace::{collapse_whitespace, left_trim, remove_all_whitespace, right_trim},
+    Cfg,
 };
-
-use crate::{entity::encode::encode_entities, Cfg};
 
 fn build_double_quoted_replacer() -> Replacer {
     let mut patterns = Vec::<Vec<u8>>::new();

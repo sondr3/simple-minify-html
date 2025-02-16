@@ -1,18 +1,11 @@
 use std::sync::LazyLock;
 
 use aho_corasick::{AhoCorasick, AhoCorasickBuilder, AhoCorasickKind, MatchKind};
-use simple_minify_html_common::{
-    gen::codepoints::TAG_NAME_CHAR,
-    spec::tag::{
-        ns::Namespace,
-        omission::{can_omit_as_before, can_omit_as_last_node},
-        void::VOID_TAGS,
-    },
-};
 
 use crate::{
     ast::NodeData,
     entity::decode::decode_entities,
+    gen::codepoints::TAG_NAME_CHAR,
     parse::{
         bang::parse_bang,
         comment::parse_comment,
@@ -21,6 +14,11 @@ use crate::{
         element::{parse_element, parse_tag, peek_tag_name},
         instruction::parse_instruction,
         Code,
+    },
+    spec::tag::{
+        ns::Namespace,
+        omission::{can_omit_as_before, can_omit_as_last_node},
+        void::VOID_TAGS,
     },
 };
 

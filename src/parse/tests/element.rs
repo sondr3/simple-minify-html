@@ -1,5 +1,4 @@
 use ahash::AHashMap;
-use simple_minify_html_common::spec::tag::{ns::Namespace, EMPTY_SLICE};
 
 use crate::{
     ast::{AttrVal, ElementClosingTag, NodeData},
@@ -7,6 +6,7 @@ use crate::{
         element::{parse_element, parse_tag, ParsedTag},
         Code,
     },
+    spec::tag::{ns::Namespace, EMPTY_SLICE},
 };
 
 fn val(v: &[u8]) -> AttrVal {

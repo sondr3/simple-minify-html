@@ -3,9 +3,8 @@ use std::str::from_utf8;
 
 #[cfg(feature = "css")]
 use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleSheet};
-use simple_minify_html_common::whitespace::trimmed;
 
-use crate::cfg::Cfg;
+use crate::{cfg::Cfg, whitespace::trimmed};
 
 #[cfg(not(feature = "css"))]
 pub fn minify_css(_cfg: &Cfg, out: &mut Vec<u8>, code: &[u8]) {
