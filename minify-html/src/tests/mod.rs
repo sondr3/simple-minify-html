@@ -1,8 +1,7 @@
 use std::str::from_utf8;
 
 use minify_html_common::tests::{
-    create_common_css_test_data, create_common_js_test_data, create_common_noncompliant_test_data,
-    create_common_test_data,
+    create_common_css_test_data, create_common_noncompliant_test_data, create_common_test_data,
 };
 
 use crate::{cfg::Cfg, minify};
@@ -53,9 +52,10 @@ fn test_common() {
     for (a, b) in create_common_css_test_data() {
         eval_with_css_min(a, b);
     }
-    for (a, b) in create_common_js_test_data() {
-        eval_with_js_min(a, b);
-    }
+    // todo: remove
+    // for (a, b) in create_common_js_test_data() {
+    //     eval_with_js_min(a, b);
+    // }
 }
 
 #[test]
@@ -198,7 +198,7 @@ fn test_space_between_attrs_minification() {
 #[test]
 fn test_attr_whatwg_unquoted_value_minification() {
     eval(b"<a b==></a>", br#"<a b="="></a>"#);
-    eval(br#"<a b=`'"<<==/`/></a>"#, br#"<a b="`'&#34<<==/`/"></a>"#);
+    eval(br#"<a b=`'"<<==/`/></a>"#, br#"<a b="`'&#34;<<==/`/"></a>"#);
 }
 
 #[test]

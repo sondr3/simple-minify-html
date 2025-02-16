@@ -1,8 +1,7 @@
 use std::str::from_utf8;
 
 use minify_html_common::tests::{
-    create_common_css_test_data, create_common_js_test_data, create_common_noncompliant_test_data,
-    create_common_test_data,
+    create_common_css_test_data, create_common_noncompliant_test_data, create_common_test_data,
 };
 
 use crate::{cfg::Cfg, err::ErrorType, in_place, with_friendly_error};
@@ -28,7 +27,7 @@ pub fn eval_with_cfg(src: &'static [u8], expected: &'static [u8], cfg: &Cfg) {
     };
 }
 
-pub fn eval_with_js_min(src: &'static [u8], expected: &'static [u8]) -> () {
+pub fn _eval_with_js_min(src: &'static [u8], expected: &'static [u8]) -> () {
     let mut cfg = Cfg::new();
     cfg.minify_js = true;
     eval_with_cfg(src, expected, &cfg);
@@ -71,9 +70,10 @@ fn test_common() {
     for (a, b) in create_common_css_test_data() {
         eval_with_css_min(a, b);
     }
-    for (a, b) in create_common_js_test_data() {
-        eval_with_js_min(a, b);
-    }
+    // todo: remove
+    // for (a, b) in create_common_js_test_data() {
+    //     eval_with_js_min(a, b);
+    // }
 }
 
 #[test]

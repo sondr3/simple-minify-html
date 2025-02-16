@@ -133,7 +133,7 @@ pub fn process_content(
                     // Current contiguous whitespace needs to be reduced to a single space character.
                     proc.write(b' ');
                     // #[allow(unused_assignments)] It may not be used now but if it is in the future then it would be a logic error (and subtle bug) to not update here.
-                    last_written = ContentType::Text;
+                    // last_written = ContentType::Text;
                 } else {
                     unreachable!();
                 };
