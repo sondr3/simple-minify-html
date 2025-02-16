@@ -1,6 +1,6 @@
 name: pipeline
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   check:
@@ -19,7 +19,7 @@ jobs:
         run: cargo test --no-run
 
       - name: test
-        run: cargo test -- --nocapture --quiet
+        run: cargo test --all-features -- --nocapture --quiet
 
       - name: formatting
         run: cargo fmt --all -- --check

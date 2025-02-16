@@ -398,7 +398,7 @@ pub fn create_common_test_data() -> HashMap<&'static [u8], &'static [u8]> {
     t.insert(b"&a<!-- akd--sj\n <!-- \t\0f--ajk--df->lafj -->mp", b"&amp");
     t.insert(
         b"<script><!-- akd--sj\n <!-- \t\0f--ajk--df->lafj --></script>",
-        b"<script><!-- akd--sj\n <!-- \t\0f--ajk--df->lafj --></script>",
+        b"<script></script>",
     );
 
     // processing instructions

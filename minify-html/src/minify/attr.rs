@@ -1,9 +1,9 @@
-#[cfg(feature = "lightningcss")]
+#[cfg(feature = "css")]
 use std::str::from_utf8;
 use std::sync::LazyLock;
 
 use aho_corasick::{AhoCorasickBuilder, AhoCorasickKind, MatchKind};
-#[cfg(feature = "lightningcss")]
+#[cfg(feature = "css")]
 use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleAttribute};
 use minify_html_common::{
     gen::{attrs::ATTRS, codepoints::DIGIT},
@@ -408,7 +408,7 @@ pub fn minify_attr(
         };
     };
 
-    #[cfg(feature = "lightningcss")]
+    #[cfg(feature = "css")]
     if name == b"style" {
         let result = match StyleAttribute::parse(
             from_utf8(&value_raw).expect("`style` attribute value contains non-UTF-8"),

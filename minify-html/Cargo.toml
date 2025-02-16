@@ -14,10 +14,19 @@ edition = "2018"
 [badges]
 maintenance = { status = "actively-developed" }
 
+[features]
+css = ["dep:lightningcss"]
+js = ["dep:oxc_minifier", "oxc_allocator", "oxc_codegen", "oxc_mangler", "oxc_parser", "oxc_span"]
+
 [dependencies]
 ahash = "0.8.6"
 aho-corasick = "1.1"
 lightningcss = { version = "1.0.0-alpha.63", optional = true }
 memchr = "2"
 minify-html-common = { version = "0.0.2", path = "../minify-html-common" }
-minify-js = "0.5.6"
+oxc_minifier = { version = "0.51.0", optional = true }
+oxc_allocator = { version = "0.51.0", optional = true }
+oxc_codegen = { version = "0.51.0", optional = true }
+oxc_mangler = { version = "0.51.0", optional = true }
+oxc_parser = { version = "0.51.0", optional = true }
+oxc_span = { version = "0.51.0", optional = true }
