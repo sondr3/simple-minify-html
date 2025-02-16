@@ -1,9 +1,9 @@
 use std::sync::LazyLock;
 
-use ahash::AHashSet;
+use rustc_hash::FxHashSet;
 
-pub static VOID_TAGS: LazyLock<AHashSet<&'static [u8]>> = LazyLock::new(|| {
-    let mut s = AHashSet::<&'static [u8]>::default();
+pub static VOID_TAGS: LazyLock<FxHashSet<&'static [u8]>> = LazyLock::new(|| {
+    let mut s = FxHashSet::<&'static [u8]>::default();
     s.insert(b"area");
     s.insert(b"base");
     s.insert(b"br");

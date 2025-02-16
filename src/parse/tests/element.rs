@@ -1,4 +1,4 @@
-use ahash::AHashMap;
+use rustc_hash::FxHashMap;
 
 use crate::{
     ast::{AttrVal, ElementClosingTag, NodeData},
@@ -30,7 +30,7 @@ fn test_parse_tag() {
         tag,
         ParsedTag {
             attributes: {
-                let mut map = AHashMap::<Vec<u8>, AttrVal>::default();
+                let mut map = FxHashMap::<Vec<u8>, AttrVal>::default();
                 map.insert(b"type".to_vec(), val(b"password"));
                 map.insert(b"\"a\"".to_vec(), val(b"  b  "));
                 map.insert(b":cd".to_vec(), val(b""));
@@ -60,7 +60,7 @@ fn test_parse_element() {
         elem,
         NodeData::Element {
             attributes: {
-                let mut map = AHashMap::<Vec<u8>, AttrVal>::default();
+                let mut map = FxHashMap::<Vec<u8>, AttrVal>::default();
                 map.insert(b"b".to_vec(), val(br#"\"c\""#));
                 map
             },

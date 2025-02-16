@@ -1,6 +1,6 @@
 use std::sync::LazyLock;
 
-use ahash::AHashMap;
+use rustc_hash::FxHashMap;
 
 use crate::spec::tag::ns::Namespace;
 
@@ -61,9 +61,9 @@ static DEFAULT_SVG: &WhitespaceMinification = &WhitespaceMinification {
 };
 
 static HTML_TAG_WHITESPACE_MINIFICATION: LazyLock<
-    AHashMap<&'static [u8], &'static WhitespaceMinification>,
+    FxHashMap<&'static [u8], &'static WhitespaceMinification>,
 > = LazyLock::new(|| {
-    let mut m = AHashMap::<&'static [u8], &'static WhitespaceMinification>::default();
+    let mut m = FxHashMap::<&'static [u8], &'static WhitespaceMinification>::default();
     // Content tags.
     m.insert(b"address", CONTENT);
     m.insert(b"audio", CONTENT);
@@ -177,9 +177,9 @@ static HTML_TAG_WHITESPACE_MINIFICATION: LazyLock<
 });
 
 static SVG_TAG_WHITESPACE_MINIFICATION: LazyLock<
-    AHashMap<&'static [u8], &'static WhitespaceMinification>,
+    FxHashMap<&'static [u8], &'static WhitespaceMinification>,
 > = LazyLock::new(|| {
-    let mut m = AHashMap::<&'static [u8], &'static WhitespaceMinification>::default();
+    let mut m = FxHashMap::<&'static [u8], &'static WhitespaceMinification>::default();
 
     // Content tags.
     m.insert(b"desc", CONTENT);

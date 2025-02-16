@@ -1,4 +1,4 @@
-use ahash::AHashMap;
+use rustc_hash::FxHashMap;
 
 use crate::{
     ast::{AttrVal, ElementClosingTag, NodeData},
@@ -26,7 +26,7 @@ pub fn minify_element(
     // If the last node of the parent is an element and it's this one.
     is_last_child_text_or_element_node: bool,
     tag_name: &[u8],
-    attributes: AHashMap<Vec<u8>, AttrVal>,
+    attributes: FxHashMap<Vec<u8>, AttrVal>,
     closing_tag: ElementClosingTag,
     children: Vec<NodeData>,
 ) {

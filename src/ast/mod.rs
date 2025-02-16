@@ -3,7 +3,7 @@ use std::{
     str::from_utf8,
 };
 
-use ahash::AHashMap;
+use rustc_hash::FxHashMap;
 
 use crate::spec::tag::ns::Namespace;
 
@@ -77,7 +77,7 @@ pub enum NodeData {
         ended: bool,
     },
     Element {
-        attributes: AHashMap<Vec<u8>, AttrVal>,
+        attributes: FxHashMap<Vec<u8>, AttrVal>,
         children: Vec<NodeData>,
         // If the source doesn't have a closing tag, then we can't add one, as otherwise output could be longer than source.
         closing_tag: ElementClosingTag,

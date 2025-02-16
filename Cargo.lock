@@ -1193,7 +1193,6 @@ checksum = "e3a9fe34e3e7a50316060351f37187a3f546bce95496156754b601a5fa71b76e"
 name = "simple-minify-html"
 version = "0.15.0"
 dependencies = [
- "ahash 0.8.11",
  "aho-corasick",
  "itertools 0.14.0",
  "lightningcss",
@@ -1204,6 +1203,7 @@ dependencies = [
  "oxc_minifier",
  "oxc_parser",
  "oxc_span",
+ "rustc-hash",
  "serde",
  "serde_json",
 ]

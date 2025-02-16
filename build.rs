@@ -74,7 +74,7 @@ fn gen_attr_min_struct(
 fn gen_attrs_rs(html_data: &HtmlData) -> String {
     let mut code = r#"
     use std::sync::LazyLock;
-    use ahash::AHashMap;
+    use rustc_hash::FxHashMap;
     use crate::spec::tag::ns::Namespace;
 
     pub struct AttributeMinification {
@@ -88,7 +88,7 @@ fn gen_attrs_rs(html_data: &HtmlData) -> String {
 
     pub enum AttrMapEntry {
         AllNamespaceElements(AttributeMinification),
-        SpecificNamespaceElements(AHashMap<&'static [u8], AttributeMinification>),
+        SpecificNamespaceElements(FxHashMap<&'static [u8], AttributeMinification>),
     }
 
     pub struct ByNamespace {
@@ -106,10 +106,10 @@ fn gen_attrs_rs(html_data: &HtmlData) -> String {
         }
     }
 
-    pub struct AttrMap(AHashMap<&'static [u8], ByNamespace>);
+    pub struct AttrMap(FxHashMap<&'static [u8], ByNamespace>);
 
     impl AttrMap {
-        pub const fn new(map: AHashMap<&'static [u8], ByNamespace>) -> AttrMap {
+        pub const fn new(map: FxHashMap<&'static [u8], ByNamespace>) -> AttrMap {
             AttrMap(map)
         }
 
@@ -123,7 +123,7 @@ fn gen_attrs_rs(html_data: &HtmlData) -> String {
 
     pub static ATTRS: LazyLock<AttrMap> = LazyLock::new(|| {
       #[allow(unused_mut)]
-      let mut m = AHashMap::<&'static [u8], ByNamespace>::default();
+      let mut m = FxHashMap::<&'static [u8], ByNamespace>::default();
   "#.to_string();
 
     for (attr_name, namespaces) in html_data.attributes.iter() {
@@ -154,7 +154,7 @@ fn gen_attrs_rs(html_data: &HtmlData) -> String {
                                 r#"
                   Some({{
                     #[allow(unused_mut)]
-                    let mut m = AHashMap::<&'static [u8], AttributeMinification>::default();
+                    let mut m = FxHashMap::<&'static [u8], AttributeMinification>::default();
                 "#
                             )
                             .unwrap();

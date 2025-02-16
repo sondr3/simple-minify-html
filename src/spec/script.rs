@@ -1,9 +1,9 @@
 use std::sync::LazyLock;
 
-use ahash::AHashSet;
+use rustc_hash::FxHashSet;
 
-pub static JAVASCRIPT_MIME_TYPES: LazyLock<AHashSet<&'static [u8]>> = LazyLock::new(|| {
-    let mut s = AHashSet::<&'static [u8]>::default();
+pub static JAVASCRIPT_MIME_TYPES: LazyLock<FxHashSet<&'static [u8]>> = LazyLock::new(|| {
+    let mut s = FxHashSet::<&'static [u8]>::default();
     s.insert(b"application/ecmascript");
     s.insert(b"application/javascript");
     s.insert(b"application/x-ecmascript");

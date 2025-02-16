@@ -3,7 +3,7 @@
 
 use std::sync::LazyLock;
 
-use ahash::{AHashMap, AHashSet};
+use rustc_hash::{FxHashMap, FxHashSet};
 
 enum ClosingTagOmissionRuleIfLast {
     // Closing tag can always be omitted if it's the last node of its parent's children.
@@ -11,7 +11,7 @@ enum ClosingTagOmissionRuleIfLast {
     // Closing tag can never be omitted if it's the last node of its parent's children.
     Never,
     // Closing tag can be omitted if it's the last node of its parent's children and the parent tag name is not one of these.
-    ParentIsNot(AHashSet<&'static [u8]>),
+    ParentIsNot(FxHashSet<&'static [u8]>),
 }
 
 // What this means in effect while parsing:
@@ -22,21 +22,21 @@ enum ClosingTagOmissionRuleIfLast {
 //     - If C is in followed_by, B is closed implicitly.
 struct ClosingTagOmissionRule {
     // Closing tag can be omitted if immediately followed by an element node with one of these tag names.
-    followed_by: AHashSet<&'static [u8]>,
+    followed_by: FxHashSet<&'static [u8]>,
     // Closing tag can be omitted if it's the last node of its parent's children.
     is_last: ClosingTagOmissionRuleIfLast,
 }
 
 static HTML_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     LazyLock::new(|| ClosingTagOmissionRule {
-        followed_by: AHashSet::default(),
+        followed_by: FxHashSet::default(),
         is_last: ClosingTagOmissionRuleIfLast::Always,
     });
 
 static HEAD_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     LazyLock::new(|| ClosingTagOmissionRule {
         followed_by: {
-            let mut s = AHashSet::<&'static [u8]>::default();
+            let mut s = FxHashSet::<&'static [u8]>::default();
             s.insert(b"body");
             s
         },
@@ -45,14 +45,14 @@ static HEAD_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
 
 static BODY_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     LazyLock::new(|| ClosingTagOmissionRule {
-        followed_by: AHashSet::default(),
+        followed_by: FxHashSet::default(),
         is_last: ClosingTagOmissionRuleIfLast::Always,
     });
 
 static LI_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     LazyLock::new(|| ClosingTagOmissionRule {
         followed_by: {
-            let mut s = AHashSet::<&'static [u8]>::default();
+            let mut s = FxHashSet::<&'static [u8]>::default();
             s.insert(b"li");
             s
         },
@@ -62,7 +62,7 @@ static LI_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
 static DT_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     LazyLock::new(|| ClosingTagOmissionRule {
         followed_by: {
-            let mut s = AHashSet::<&'static [u8]>::default();
+            let mut s = FxHashSet::<&'static [u8]>::default();
             s.insert(b"dt");
             s.insert(b"dd");
             s
@@ -73,7 +73,7 @@ static DT_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
 static DD_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     LazyLock::new(|| ClosingTagOmissionRule {
         followed_by: {
-            let mut s = AHashSet::<&'static [u8]>::default();
+            let mut s = FxHashSet::<&'static [u8]>::default();
             s.insert(b"dd");
             s.insert(b"dt");
             s
@@ -82,7 +82,7 @@ static DD_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     });
 
 static P_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> = LazyLock::new(|| {
-    let mut followed_by = AHashSet::<&'static [u8]>::default();
+    let mut followed_by = FxHashSet::<&'static [u8]>::default();
     followed_by.insert(b"address");
     followed_by.insert(b"article");
     followed_by.insert(b"aside");
@@ -114,7 +114,7 @@ static P_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> = LazyLock:
     followed_by.insert(b"table");
     followed_by.insert(b"ul");
 
-    let mut is_last_tags = AHashSet::<&'static [u8]>::default();
+    let mut is_last_tags = FxHashSet::<&'static [u8]>::default();
     is_last_tags.insert(b"a");
     is_last_tags.insert(b"audio");
     is_last_tags.insert(b"del");
@@ -132,7 +132,7 @@ static P_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> = LazyLock:
 static RT_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     LazyLock::new(|| ClosingTagOmissionRule {
         followed_by: {
-            let mut s = AHashSet::<&'static [u8]>::default();
+            let mut s = FxHashSet::<&'static [u8]>::default();
             s.insert(b"rt");
             s.insert(b"rp");
             s
@@ -143,7 +143,7 @@ static RT_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
 static RP_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     LazyLock::new(|| ClosingTagOmissionRule {
         followed_by: {
-            let mut s = AHashSet::<&'static [u8]>::default();
+            let mut s = FxHashSet::<&'static [u8]>::default();
             s.insert(b"rt");
             s.insert(b"rp");
             s
@@ -154,7 +154,7 @@ static RP_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
 static OPTGROUP_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     LazyLock::new(|| ClosingTagOmissionRule {
         followed_by: {
-            let mut s = AHashSet::<&'static [u8]>::default();
+            let mut s = FxHashSet::<&'static [u8]>::default();
             s.insert(b"optgroup");
             s
         },
@@ -164,7 +164,7 @@ static OPTGROUP_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
 static OPTION_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     LazyLock::new(|| ClosingTagOmissionRule {
         followed_by: {
-            let mut s = AHashSet::<&'static [u8]>::default();
+            let mut s = FxHashSet::<&'static [u8]>::default();
             s.insert(b"option");
             s.insert(b"optgroup");
             s
@@ -175,7 +175,7 @@ static OPTION_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
 static THEAD_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     LazyLock::new(|| ClosingTagOmissionRule {
         followed_by: {
-            let mut s = AHashSet::<&'static [u8]>::default();
+            let mut s = FxHashSet::<&'static [u8]>::default();
             s.insert(b"tbody");
             s.insert(b"tfoot");
             s
@@ -186,7 +186,7 @@ static THEAD_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
 static TBODY_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     LazyLock::new(|| ClosingTagOmissionRule {
         followed_by: {
-            let mut s = AHashSet::<&'static [u8]>::default();
+            let mut s = FxHashSet::<&'static [u8]>::default();
             s.insert(b"tbody");
             s.insert(b"tfoot");
             s
@@ -196,14 +196,14 @@ static TBODY_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
 
 static TFOOT_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     LazyLock::new(|| ClosingTagOmissionRule {
-        followed_by: AHashSet::<&'static [u8]>::default(),
+        followed_by: FxHashSet::<&'static [u8]>::default(),
         is_last: ClosingTagOmissionRuleIfLast::Always,
     });
 
 static TR_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     LazyLock::new(|| ClosingTagOmissionRule {
         followed_by: {
-            let mut s = AHashSet::<&'static [u8]>::default();
+            let mut s = FxHashSet::<&'static [u8]>::default();
             s.insert(b"tr");
             s
         },
@@ -213,7 +213,7 @@ static TR_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
 static TD_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     LazyLock::new(|| ClosingTagOmissionRule {
         followed_by: {
-            let mut s = AHashSet::<&'static [u8]>::default();
+            let mut s = FxHashSet::<&'static [u8]>::default();
             s.insert(b"td");
             s.insert(b"th");
             s
@@ -224,7 +224,7 @@ static TD_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
 static TH_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     LazyLock::new(|| ClosingTagOmissionRule {
         followed_by: {
-            let mut s = AHashSet::<&'static [u8]>::default();
+            let mut s = FxHashSet::<&'static [u8]>::default();
             s.insert(b"td");
             s.insert(b"th");
             s
@@ -233,9 +233,9 @@ static TH_CLOSING_TAG_OMISSION_RULE: LazyLock<ClosingTagOmissionRule> =
     });
 
 static CLOSING_TAG_OMISSION_RULES: LazyLock<
-    AHashMap<&'static [u8], &'static ClosingTagOmissionRule>,
+    FxHashMap<&'static [u8], &'static ClosingTagOmissionRule>,
 > = LazyLock::new(|| {
-    let mut m = AHashMap::<&'static [u8], &'static ClosingTagOmissionRule>::default();
+    let mut m = FxHashMap::<&'static [u8], &'static ClosingTagOmissionRule>::default();
     m.insert(b"html", &HTML_CLOSING_TAG_OMISSION_RULE);
     m.insert(b"head", &HEAD_CLOSING_TAG_OMISSION_RULE);
     m.insert(b"body", &BODY_CLOSING_TAG_OMISSION_RULE);
