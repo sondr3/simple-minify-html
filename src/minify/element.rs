@@ -72,7 +72,7 @@ pub fn minify_element(
         out.extend_from_slice(tag_name);
 
         for (i, (name, value)) in quoted.iter().enumerate() {
-            if i == 0 || !cfg.allow_removing_spaces_between_attributes {
+            if i == 0 {
                 out.push(b' ');
             };
             out.extend_from_slice(name);
@@ -84,10 +84,7 @@ pub fn minify_element(
             // Write a space between unquoted attributes,
             // or after the tag name if it wasn't written already during `quoted` processing,
             // or if forced by Cfg.
-            if i > 0
-                || (i == 0 && quoted.is_empty())
-                || !cfg.allow_removing_spaces_between_attributes
-            {
+            if i > 0 || (i == 0 && quoted.is_empty()) {
                 out.push(b' ');
             };
             out.extend_from_slice(name);

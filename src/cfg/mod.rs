@@ -6,8 +6,6 @@ pub struct Cfg {
     pub allow_noncompliant_unquoted_attribute_values: bool,
     /// Allow some minifications around entities that may not pass validation, but will still be parsed correctly by almost all browsers.
     pub allow_optimal_entities: bool,
-    /// Allow removing_spaces between attributes when possible, which may not be spec compliant. These will still be parsed correctly by almost all browsers.
-    pub allow_removing_spaces_between_attributes: bool,
     /// Do not omit closing tags when possible.
     pub keep_closing_tags: bool,
     /// Keep all comments.
@@ -32,6 +30,5 @@ impl Cfg {
     pub fn enable_possibly_noncompliant(&mut self) {
         self.allow_noncompliant_unquoted_attribute_values = true;
         self.allow_optimal_entities = true;
-        self.allow_removing_spaces_between_attributes = true;
     }
 }
