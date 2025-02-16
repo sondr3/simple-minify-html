@@ -46,7 +46,7 @@ pub fn minify(src: &[u8], cfg: Option<Cfg>) -> Vec<u8> {
     let mut code = Code::new_with_opts(src);
     let parsed = parse_content(&mut code, Namespace::Html, EMPTY_SLICE, EMPTY_SLICE);
     let mut out = Vec::with_capacity(src.len());
-    let cfg = cfg.unwrap_or(Cfg::default());
+    let cfg = cfg.unwrap_or_default();
     minify_content(
         &cfg,
         &mut out,
