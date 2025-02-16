@@ -6,21 +6,11 @@ use std::str::from_utf8;
 use crate::tests::helpers::create_common_css_test_data;
 #[cfg(feature = "js")]
 use crate::tests::helpers::create_common_js_test_data;
-use crate::{
-    cfg::Cfg,
-    minify,
-    tests::helpers::{create_common_noncompliant_test_data, create_common_test_data},
-};
+use crate::{cfg::Cfg, minify, tests::helpers::create_common_test_data};
 
 pub fn eval_with_cfg(src: &'static [u8], expected: &'static [u8], cfg: &Cfg) {
     let min = minify(&src, cfg);
     assert_eq!(from_utf8(&min).unwrap(), from_utf8(expected).unwrap(),);
-}
-
-pub fn eval_with_noncompliant(src: &'static [u8], expected: &'static [u8]) {
-    let mut cfg = Cfg::new();
-    cfg.enable_possibly_noncompliant();
-    eval_with_cfg(src, expected, &cfg)
 }
 
 #[cfg(feature = "js")]
@@ -51,9 +41,6 @@ fn eval_without_keep_html_head(src: &'static [u8], expected: &'static [u8]) -> (
 fn test_common() {
     for (a, b) in create_common_test_data() {
         eval(a, b);
-    }
-    for (a, b) in create_common_noncompliant_test_data() {
-        eval_with_noncompliant(a, b);
     }
     #[cfg(feature = "css")]
     for (a, b) in create_common_css_test_data() {
@@ -138,23 +125,6 @@ fn test_unmatched_closing_tag() {
 }
 
 #[test]
-// NOTE: Keep inputs in sync with onepass variant. Outputs are different as main variant reorders attributes.
-fn test_space_between_attrs_minification() {
-    eval_with_noncompliant(
-        b"<div a=\" \" b=\" \"></div>",
-        b"<div a=\" \"b=\" \"></div>",
-    );
-    eval_with_noncompliant(b"<div a=' ' b=\" \"></div>", b"<div a=\" \"b=\" \"></div>");
-    eval_with_noncompliant(
-        b"<div a=&#x20 b=\" \"></div>",
-        b"<div a=\" \"b=\" \"></div>",
-    );
-    eval_with_noncompliant(b"<div a=\"1\" b=\" \"></div>", b"<div b=\" \"a=1></div>");
-    eval_with_noncompliant(b"<div a='1' b=\" \"></div>", b"<div b=\" \"a=1></div>");
-    eval_with_noncompliant(b"<div a=\"a\"b=\"b\"></div>", b"<div a=a b=b></div>");
-}
-
-#[test]
 fn test_attr_whatwg_unquoted_value_minification() {
     eval(b"<a b==></a>", br#"<a b="="></a>"#);
     eval(br#"<a b=`'"<<==/`/></a>"#, br#"<a b="`'&#34;<<==/`/"></a>"#);
@@ -172,10 +142,6 @@ fn test_alt_attr_minification() {
 
 #[test]
 fn test_viewport_attr_minification() {
-    eval_with_noncompliant(
-        b"<meta name=viewport content='width=device-width, initial-scale=1'>",
-        b"<meta content=width=device-width,initial-scale=1 name=viewport>",
-    );
     eval(
         b"<meta name=viewport content='width=device-width, initial-scale=1'>",
         br#"<meta content="width=device-width,initial-scale=1" name=viewport>"#,

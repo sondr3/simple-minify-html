@@ -71,22 +71,15 @@ pub fn minify_element(
         out.push(b'<');
         out.extend_from_slice(tag_name);
 
-        for (i, (name, value)) in quoted.iter().enumerate() {
-            if i == 0 {
-                out.push(b' ');
-            };
+        for (name, value) in quoted.iter() {
+            out.push(b' ');
             out.extend_from_slice(name);
             out.push(b'=');
             debug_assert!(value.quoted());
             value.out(out);
         }
-        for (i, (name, value)) in unquoted.iter().enumerate() {
-            // Write a space between unquoted attributes,
-            // or after the tag name if it wasn't written already during `quoted` processing,
-            // or if forced by Cfg.
-            if i > 0 || (i == 0 && quoted.is_empty()) {
-                out.push(b' ');
-            };
+        for (name, value) in unquoted.iter() {
+            out.push(b' ');
             out.extend_from_slice(name);
             if let AttrMinified::Value(v) = value {
                 out.push(b'=');

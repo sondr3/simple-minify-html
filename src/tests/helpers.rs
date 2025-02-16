@@ -489,13 +489,3 @@ pub fn create_common_js_test_data() -> HashMap<&'static [u8], &'static [u8]> {
 
     t
 }
-
-pub fn create_common_noncompliant_test_data() -> HashMap<&'static [u8], &'static [u8]> {
-    let mut t = HashMap::<&'static [u8], &'static [u8]>::new();
-
-    // attr unquoted value minification
-    t.insert(b"<a b==></a>", b"<a b==></a>");
-    t.insert(b"<a b=`'\"<<==/`/></a>", b"<a b=`'\"<<==/`/></a>");
-
-    t
-}
