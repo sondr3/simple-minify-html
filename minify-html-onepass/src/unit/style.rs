@@ -1,4 +1,4 @@
-use std::str::from_utf8_unchecked;
+use std::{default::Default, str::from_utf8_unchecked};
 
 use aho_corasick::{AhoCorasick, AhoCorasickBuilder, AhoCorasickKind};
 use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleSheet};
@@ -25,8 +25,10 @@ pub fn process_style(proc: &mut Processor, cfg: &Cfg) -> ProcessingResult<()> {
     // `process_tag` will require closing tag.
 
     if cfg.minify_css {
-        let mut popt = PrinterOptions::default();
-        popt.minify = true;
+        let popt = PrinterOptions {
+            minify: true,
+            ..Default::default()
+        };
         let result = match StyleSheet::parse(
             unsafe { from_utf8_unchecked(&proc[src]) },
             ParserOptions::default(),

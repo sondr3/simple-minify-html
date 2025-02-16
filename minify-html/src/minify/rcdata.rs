@@ -11,8 +11,8 @@ pub fn minify_rcdata(cfg: &Cfg, out: &mut Vec<u8>, typ: RcdataContentType, text:
 
     // Since the text has been decoded, there may be unintentional matches to end tags that we must escape.
     let html = match typ {
-        RcdataContentType::Textarea => &*TAG_TEXTAREA_END,
-        RcdataContentType::Title => &*TAG_TITLE_END,
+        RcdataContentType::Textarea => &TAG_TEXTAREA_END,
+        RcdataContentType::Title => &TAG_TITLE_END,
     }
     .replace_all_bytes(
         &html,

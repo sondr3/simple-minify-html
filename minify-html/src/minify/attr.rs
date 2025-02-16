@@ -248,16 +248,16 @@ fn build_whatwg_unquoted_replacer() -> Replacer {
     )
 }
 
-static DOUBLE_QUOTED_REPLACER: Lazy<Replacer> = Lazy::new(|| build_double_quoted_replacer());
-static SINGLE_QUOTED_REPLACER: Lazy<Replacer> = Lazy::new(|| build_single_quoted_replacer());
-static UNQUOTED_REPLACER: Lazy<Replacer> = Lazy::new(|| build_unquoted_replacer());
+static DOUBLE_QUOTED_REPLACER: Lazy<Replacer> = Lazy::new(build_double_quoted_replacer);
+static SINGLE_QUOTED_REPLACER: Lazy<Replacer> = Lazy::new(build_single_quoted_replacer);
+static UNQUOTED_REPLACER: Lazy<Replacer> = Lazy::new(build_unquoted_replacer);
 static SEMI_WHATWG_UNQUOTED_REPLACER: Lazy<Replacer> =
-    Lazy::new(|| build_semi_whatwg_unquoted_replacer());
+    Lazy::new(build_semi_whatwg_unquoted_replacer);
 static WHATWG_DOUBLE_QUOTED_REPLACER: Lazy<Replacer> =
-    Lazy::new(|| build_whatwg_double_quoted_replacer());
+    Lazy::new(build_whatwg_double_quoted_replacer);
 static WHATWG_SINGLE_QUOTED_REPLACER: Lazy<Replacer> =
-    Lazy::new(|| build_whatwg_single_quoted_replacer());
-static WHATWG_UNQUOTED_REPLACER: Lazy<Replacer> = Lazy::new(|| build_whatwg_unquoted_replacer());
+    Lazy::new(build_whatwg_single_quoted_replacer);
+static WHATWG_UNQUOTED_REPLACER: Lazy<Replacer> = Lazy::new(build_whatwg_unquoted_replacer);
 
 pub struct AttrMinifiedValue {
     quoted: bool,
@@ -413,8 +413,10 @@ pub fn minify_attr(
         ) {
             Ok(mut sty) => {
                 sty.minify(MinifyOptions::default());
-                let mut popt = PrinterOptions::default();
-                popt.minify = true;
+                let popt = PrinterOptions {
+                    minify: true,
+                    ..Default::default()
+                };
                 match sty.to_css(popt) {
                     Ok(out) => Some(out.code),
                     // TODO Collect error as warning.

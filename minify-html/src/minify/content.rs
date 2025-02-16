@@ -54,8 +54,8 @@ fn build_whatwg_chevron_replacer() -> Replacer {
     )
 }
 
-static OPTIMAL_CHEVRON_REPLACER: Lazy<Replacer> = Lazy::new(|| build_optimal_chevron_replacer());
-static WHATWG_CHEVRON_REPLACER: Lazy<Replacer> = Lazy::new(|| build_whatwg_chevron_replacer());
+static OPTIMAL_CHEVRON_REPLACER: Lazy<Replacer> = Lazy::new(build_optimal_chevron_replacer);
+static WHATWG_CHEVRON_REPLACER: Lazy<Replacer> = Lazy::new(build_whatwg_chevron_replacer);
 
 pub fn minify_content(
     cfg: &Cfg,

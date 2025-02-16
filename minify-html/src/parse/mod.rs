@@ -33,7 +33,7 @@ pub struct Code<'c> {
 #[derive(Copy, Clone)]
 pub struct Checkpoint(usize);
 
-impl<'c> Code<'c> {
+impl Code<'_> {
     pub fn new_with_opts(code: &[u8], opts: ParseOpts) -> Code {
         Code {
             code,

@@ -55,7 +55,7 @@ pub struct Processor<'d> {
     write_next: usize,
 }
 
-impl<'d> Index<ProcessorRange> for Processor<'d> {
+impl Index<ProcessorRange> for Processor<'_> {
     type Output = [u8];
 
     #[inline(always)]
@@ -64,7 +64,7 @@ impl<'d> Index<ProcessorRange> for Processor<'d> {
     }
 }
 
-impl<'d> IndexMut<ProcessorRange> for Processor<'d> {
+impl IndexMut<ProcessorRange> for Processor<'_> {
     #[inline(always)]
     fn index_mut(&mut self, index: ProcessorRange) -> &mut Self::Output {
         debug_assert!(index.end <= self.write_next);
@@ -73,7 +73,7 @@ impl<'d> IndexMut<ProcessorRange> for Processor<'d> {
 }
 
 #[allow(dead_code)]
-impl<'d> Processor<'d> {
+impl Processor<'_> {
     // Constructor.
     #[inline(always)]
     pub fn new(code: &mut [u8]) -> Processor {
@@ -269,6 +269,7 @@ impl<'d> Processor<'d> {
     /// Skip and return the next character.
     /// Will result in an error if exceeds bounds.
     #[inline(always)]
+    #[allow(clippy::manual_inspect)]
     pub fn skip(&mut self) -> ProcessingResult<u8> {
         self._maybe_read_offset(0)
             .map(|c| {
@@ -334,6 +335,7 @@ impl<'d> Processor<'d> {
 
     // Shifting characters.
     #[inline(always)]
+    #[allow(clippy::manual_inspect)]
     pub fn accept(&mut self) -> ProcessingResult<u8> {
         self._maybe_read_offset(0)
             .map(|c| {
