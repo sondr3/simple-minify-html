@@ -551,6 +551,4 @@ fn main() {
     std::fs::write(out_dir.join("attrs.rs"), gen_attrs_rs(&html_data)).unwrap();
     std::fs::write(out_dir.join("codepoints.rs"), gen_codepoints_rs()).unwrap();
     std::fs::write(out_dir.join("entities.rs"), gen_entities_rs()).unwrap();
-
-    println!("cargo:rerun-if-changed=build.rs");
 }
