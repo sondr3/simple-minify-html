@@ -1,6 +1,7 @@
+use std::sync::LazyLock;
+
 use aho_corasick::{AhoCorasick, AhoCorasickBuilder, AhoCorasickKind};
 use minify_js::Session;
-use once_cell::sync::Lazy;
 
 use crate::{
     cfg::Cfg,
@@ -8,7 +9,7 @@ use crate::{
     proc::{MatchAction::*, MatchMode::*, Processor},
 };
 
-static SCRIPT_END: Lazy<AhoCorasick> = Lazy::new(|| {
+static SCRIPT_END: LazyLock<AhoCorasick> = LazyLock::new(|| {
     AhoCorasickBuilder::new()
         .ascii_case_insensitive(true)
         .kind(Some(AhoCorasickKind::DFA))

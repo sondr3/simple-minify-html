@@ -1,12 +1,11 @@
-use std::io::Write;
+use std::{io::Write, sync::LazyLock};
 
 use aho_corasick::{AhoCorasickBuilder, AhoCorasickKind, MatchKind};
 use minify_html_common::pattern::Replacer;
-use once_cell::sync::Lazy;
 
 use crate::ast::{ElementClosingTag, NodeData};
 
-static TEXT_REPLACER: Lazy<Replacer> = Lazy::new(|| {
+static TEXT_REPLACER: LazyLock<Replacer> = LazyLock::new(|| {
     Replacer::new(
         AhoCorasickBuilder::new()
             .kind(Some(AhoCorasickKind::DFA))
@@ -16,7 +15,7 @@ static TEXT_REPLACER: Lazy<Replacer> = Lazy::new(|| {
         vec![b"&amp;".to_vec(), b"&lt;".to_vec()],
     )
 });
-static DOUBLE_QUOTED_REPLACER: Lazy<Replacer> = Lazy::new(|| {
+static DOUBLE_QUOTED_REPLACER: LazyLock<Replacer> = LazyLock::new(|| {
     Replacer::new(
         AhoCorasickBuilder::new()
             .kind(Some(AhoCorasickKind::DFA))
@@ -26,7 +25,7 @@ static DOUBLE_QUOTED_REPLACER: Lazy<Replacer> = Lazy::new(|| {
         vec![b"&amp;".to_vec(), b"&#34;".to_vec()],
     )
 });
-static SINGLE_QUOTED_REPLACER: Lazy<Replacer> = Lazy::new(|| {
+static SINGLE_QUOTED_REPLACER: LazyLock<Replacer> = LazyLock::new(|| {
     Replacer::new(
         AhoCorasickBuilder::new()
             .kind(Some(AhoCorasickKind::DFA))
@@ -36,7 +35,7 @@ static SINGLE_QUOTED_REPLACER: Lazy<Replacer> = Lazy::new(|| {
         vec![b"&amp;".to_vec(), b"&#39;".to_vec()],
     )
 });
-static UNQUOTED_REPLACER: Lazy<Replacer> = Lazy::new(|| {
+static UNQUOTED_REPLACER: LazyLock<Replacer> = LazyLock::new(|| {
     Replacer::new(
         AhoCorasickBuilder::new()
             .kind(Some(AhoCorasickKind::DFA))

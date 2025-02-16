@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use aho_corasick::{AhoCorasick, AhoCorasickBuilder, AhoCorasickKind, MatchKind};
 use memchr::memchr;
 use minify_html_common::{
@@ -9,9 +11,8 @@ use minify_html_common::{
     },
     pattern::TrieNodeMatch,
 };
-use once_cell::sync::Lazy;
 
-static SHORTER_ENCODED_ENTITIES_ENCODED_SEARCHER: Lazy<AhoCorasick> = Lazy::new(|| {
+static SHORTER_ENCODED_ENTITIES_ENCODED_SEARCHER: LazyLock<AhoCorasick> = LazyLock::new(|| {
     AhoCorasickBuilder::new()
         .kind(Some(AhoCorasickKind::DFA))
         .match_kind(MatchKind::LeftmostLongest)

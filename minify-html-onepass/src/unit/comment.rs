@@ -1,12 +1,13 @@
+use std::sync::LazyLock;
+
 use aho_corasick::{AhoCorasick, AhoCorasickBuilder, AhoCorasickKind};
-use once_cell::sync::Lazy;
 
 use crate::{
     err::ProcessingResult,
     proc::{MatchAction::*, MatchMode::*, Processor},
 };
 
-static COMMENT_END: Lazy<AhoCorasick> = Lazy::new(|| {
+static COMMENT_END: LazyLock<AhoCorasick> = LazyLock::new(|| {
     AhoCorasickBuilder::new()
         .kind(Some(AhoCorasickKind::DFA))
         .build(["-->"])

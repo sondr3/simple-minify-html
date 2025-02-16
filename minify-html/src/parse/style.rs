@@ -1,12 +1,13 @@
+use std::sync::LazyLock;
+
 use aho_corasick::{AhoCorasick, AhoCorasickBuilder, AhoCorasickKind};
-use once_cell::sync::Lazy;
 
 use crate::{
     ast::{NodeData, ScriptOrStyleLang},
     parse::{content::ParsedContent, Code},
 };
 
-static END: Lazy<AhoCorasick> = Lazy::new(|| {
+static END: LazyLock<AhoCorasick> = LazyLock::new(|| {
     AhoCorasickBuilder::new()
         .ascii_case_insensitive(true)
         .kind(Some(AhoCorasickKind::DFA))

@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use aho_corasick::{AhoCorasick, AhoCorasickBuilder, AhoCorasickKind, MatchKind};
 use minify_html_common::{
     gen::codepoints::TAG_NAME_CHAR,
@@ -7,7 +9,6 @@ use minify_html_common::{
         void::VOID_TAGS,
     },
 };
-use once_cell::sync::Lazy;
 
 use crate::{
     ast::NodeData,
@@ -149,34 +150,34 @@ fn build_content_type_matcher(
     )
 }
 
-static CONTENT_TYPE_MATCHER: Lazy<(AhoCorasick, Vec<ContentType>)> =
-    Lazy::new(|| build_content_type_matcher(false, false));
-static CONTENT_TYPE_MATCHER_OPAQUE_BRACE: Lazy<(AhoCorasick, Vec<ContentType>)> =
-    Lazy::new(|| build_content_type_matcher(true, false));
-static CONTENT_TYPE_MATCHER_OPAQUE_CP: Lazy<(AhoCorasick, Vec<ContentType>)> =
-    Lazy::new(|| build_content_type_matcher(false, true));
-static CONTENT_TYPE_MATCHER_OPAQUE_BRACE_CP: Lazy<(AhoCorasick, Vec<ContentType>)> =
-    Lazy::new(|| build_content_type_matcher(true, true));
+static CONTENT_TYPE_MATCHER: LazyLock<(AhoCorasick, Vec<ContentType>)> =
+    LazyLock::new(|| build_content_type_matcher(false, false));
+static CONTENT_TYPE_MATCHER_OPAQUE_BRACE: LazyLock<(AhoCorasick, Vec<ContentType>)> =
+    LazyLock::new(|| build_content_type_matcher(true, false));
+static CONTENT_TYPE_MATCHER_OPAQUE_CP: LazyLock<(AhoCorasick, Vec<ContentType>)> =
+    LazyLock::new(|| build_content_type_matcher(false, true));
+static CONTENT_TYPE_MATCHER_OPAQUE_BRACE_CP: LazyLock<(AhoCorasick, Vec<ContentType>)> =
+    LazyLock::new(|| build_content_type_matcher(true, true));
 
-static CLOSING_BRACE_BRACE: Lazy<AhoCorasick> = Lazy::new(|| {
+static CLOSING_BRACE_BRACE: LazyLock<AhoCorasick> = LazyLock::new(|| {
     AhoCorasickBuilder::new()
         .kind(Some(AhoCorasickKind::DFA))
         .build(["}}"])
         .unwrap()
 });
-static CLOSING_BRACE_HASH: Lazy<AhoCorasick> = Lazy::new(|| {
+static CLOSING_BRACE_HASH: LazyLock<AhoCorasick> = LazyLock::new(|| {
     AhoCorasickBuilder::new()
         .kind(Some(AhoCorasickKind::DFA))
         .build(["#}"])
         .unwrap()
 });
-static CLOSING_BRACE_PERCENT: Lazy<AhoCorasick> = Lazy::new(|| {
+static CLOSING_BRACE_PERCENT: LazyLock<AhoCorasick> = LazyLock::new(|| {
     AhoCorasickBuilder::new()
         .kind(Some(AhoCorasickKind::DFA))
         .build(["%}"])
         .unwrap()
 });
-static CLOSING_CHEVRON_PERCENT: Lazy<AhoCorasick> = Lazy::new(|| {
+static CLOSING_CHEVRON_PERCENT: LazyLock<AhoCorasick> = LazyLock::new(|| {
     AhoCorasickBuilder::new()
         .kind(Some(AhoCorasickKind::DFA))
         .build(["%>"])

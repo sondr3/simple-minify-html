@@ -1,8 +1,7 @@
-use std::{default::Default, str::from_utf8_unchecked};
+use std::{default::Default, str::from_utf8_unchecked, sync::LazyLock};
 
 use aho_corasick::{AhoCorasick, AhoCorasickBuilder, AhoCorasickKind};
 use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleSheet};
-use once_cell::sync::Lazy;
 
 use crate::{
     err::ProcessingResult,
@@ -10,7 +9,7 @@ use crate::{
     Cfg,
 };
 
-static STYLE_END: Lazy<AhoCorasick> = Lazy::new(|| {
+static STYLE_END: LazyLock<AhoCorasick> = LazyLock::new(|| {
     AhoCorasickBuilder::new()
         .ascii_case_insensitive(true)
         .kind(Some(AhoCorasickKind::DFA))

@@ -73,7 +73,7 @@ fn gen_attr_min_struct(
 
 fn gen_attrs_rs(html_data: &HtmlData) -> String {
     let mut code = r#"
-    use once_cell::sync::Lazy;
+    use std::sync::LazyLock;
     use ahash::AHashMap;
     use crate::spec::tag::ns::Namespace;
 
@@ -121,7 +121,7 @@ fn gen_attrs_rs(html_data: &HtmlData) -> String {
         }
     }
 
-    pub static ATTRS: Lazy<AttrMap> = Lazy::new(|| {
+    pub static ATTRS: LazyLock<AttrMap> = LazyLock::new(|| {
       #[allow(unused_mut)]
       let mut m = AHashMap::<&'static [u8], ByNamespace>::default();
   "#.to_string();

@@ -1,8 +1,9 @@
+use std::sync::LazyLock;
+
 use ahash::AHashMap;
 use minify_html_common::gen::codepoints::{
     ATTR_QUOTE, DIGIT, DOUBLE_QUOTE, NOT_UNQUOTED_ATTR_VAL_CHAR, SINGLE_QUOTE, WHITESPACE,
 };
-use once_cell::sync::Lazy;
 
 use crate::{
     err::ProcessingResult,
@@ -13,7 +14,7 @@ use crate::{
 };
 
 // See comment in `process_attr_value` for full description of why these intentionally do not have semicolons.
-static ENCODED: Lazy<AHashMap<u8, &'static [u8]>> = Lazy::new(|| {
+static ENCODED: LazyLock<AHashMap<u8, &'static [u8]>> = LazyLock::new(|| {
     let mut m = AHashMap::<u8, &'static [u8]>::default();
     m.insert(b'\'', b"&#39");
     m.insert(b'"', b"&#34");

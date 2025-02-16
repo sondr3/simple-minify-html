@@ -1,4 +1,4 @@
-use std::str::from_utf8;
+use std::{str::from_utf8, sync::LazyLock};
 
 use aho_corasick::{AhoCorasickBuilder, AhoCorasickKind, MatchKind};
 use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleAttribute};
@@ -8,7 +8,6 @@ use minify_html_common::{
     spec::{script::JAVASCRIPT_MIME_TYPES, tag::ns::Namespace},
     whitespace::{collapse_whitespace, left_trim, remove_all_whitespace, right_trim},
 };
-use once_cell::sync::Lazy;
 
 use crate::{entity::encode::encode_entities, Cfg};
 
@@ -248,16 +247,16 @@ fn build_whatwg_unquoted_replacer() -> Replacer {
     )
 }
 
-static DOUBLE_QUOTED_REPLACER: Lazy<Replacer> = Lazy::new(build_double_quoted_replacer);
-static SINGLE_QUOTED_REPLACER: Lazy<Replacer> = Lazy::new(build_single_quoted_replacer);
-static UNQUOTED_REPLACER: Lazy<Replacer> = Lazy::new(build_unquoted_replacer);
-static SEMI_WHATWG_UNQUOTED_REPLACER: Lazy<Replacer> =
-    Lazy::new(build_semi_whatwg_unquoted_replacer);
-static WHATWG_DOUBLE_QUOTED_REPLACER: Lazy<Replacer> =
-    Lazy::new(build_whatwg_double_quoted_replacer);
-static WHATWG_SINGLE_QUOTED_REPLACER: Lazy<Replacer> =
-    Lazy::new(build_whatwg_single_quoted_replacer);
-static WHATWG_UNQUOTED_REPLACER: Lazy<Replacer> = Lazy::new(build_whatwg_unquoted_replacer);
+static DOUBLE_QUOTED_REPLACER: LazyLock<Replacer> = LazyLock::new(build_double_quoted_replacer);
+static SINGLE_QUOTED_REPLACER: LazyLock<Replacer> = LazyLock::new(build_single_quoted_replacer);
+static UNQUOTED_REPLACER: LazyLock<Replacer> = LazyLock::new(build_unquoted_replacer);
+static SEMI_WHATWG_UNQUOTED_REPLACER: LazyLock<Replacer> =
+    LazyLock::new(build_semi_whatwg_unquoted_replacer);
+static WHATWG_DOUBLE_QUOTED_REPLACER: LazyLock<Replacer> =
+    LazyLock::new(build_whatwg_double_quoted_replacer);
+static WHATWG_SINGLE_QUOTED_REPLACER: LazyLock<Replacer> =
+    LazyLock::new(build_whatwg_single_quoted_replacer);
+static WHATWG_UNQUOTED_REPLACER: LazyLock<Replacer> = LazyLock::new(build_whatwg_unquoted_replacer);
 
 pub struct AttrMinifiedValue {
     quoted: bool,

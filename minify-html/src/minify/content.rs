@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use aho_corasick::{AhoCorasickBuilder, AhoCorasickKind, MatchKind};
 use minify_html_common::{
     gen::codepoints::TAG_NAME_CHAR,
@@ -8,7 +10,6 @@ use minify_html_common::{
     },
     whitespace::{collapse_whitespace, is_all_whitespace, left_trim, right_trim},
 };
-use once_cell::sync::Lazy;
 
 use super::rcdata::minify_rcdata;
 use crate::{
@@ -54,8 +55,8 @@ fn build_whatwg_chevron_replacer() -> Replacer {
     )
 }
 
-static OPTIMAL_CHEVRON_REPLACER: Lazy<Replacer> = Lazy::new(build_optimal_chevron_replacer);
-static WHATWG_CHEVRON_REPLACER: Lazy<Replacer> = Lazy::new(build_whatwg_chevron_replacer);
+static OPTIMAL_CHEVRON_REPLACER: LazyLock<Replacer> = LazyLock::new(build_optimal_chevron_replacer);
+static WHATWG_CHEVRON_REPLACER: LazyLock<Replacer> = LazyLock::new(build_whatwg_chevron_replacer);
 
 pub fn minify_content(
     cfg: &Cfg,

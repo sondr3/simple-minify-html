@@ -1,7 +1,8 @@
-use ahash::AHashSet;
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 
-pub static VOID_TAGS: Lazy<AHashSet<&'static [u8]>> = Lazy::new(|| {
+use ahash::AHashSet;
+
+pub static VOID_TAGS: LazyLock<AHashSet<&'static [u8]>> = LazyLock::new(|| {
     let mut s = AHashSet::<&'static [u8]>::default();
     s.insert(b"area");
     s.insert(b"base");
