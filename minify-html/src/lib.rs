@@ -1,14 +1,16 @@
 #![deny(unsafe_code)]
 
-use crate::ast::c14n::c14n_serialise_ast;
-pub use crate::cfg::Cfg;
-use crate::minify::content::minify_content;
-use crate::parse::content::parse_content;
-use crate::parse::Code;
-use minify_html_common::spec::tag::ns::Namespace;
-use minify_html_common::spec::tag::EMPTY_SLICE;
-use parse::ParseOpts;
 use std::io::Write;
+
+use minify_html_common::spec::tag::{ns::Namespace, EMPTY_SLICE};
+use parse::ParseOpts;
+
+pub use crate::cfg::Cfg;
+use crate::{
+    ast::c14n::c14n_serialise_ast,
+    minify::content::minify_content,
+    parse::{content::parse_content, Code},
+};
 
 mod ast;
 mod cfg;
@@ -38,29 +40,32 @@ mod tests;
 /// assert_eq!(minified, b"<p>Hello, world!".to_vec());
 /// ```
 pub fn minify(src: &[u8], cfg: &Cfg) -> Vec<u8> {
-  let mut code = Code::new_with_opts(src, ParseOpts {
-    treat_brace_as_opaque: cfg.preserve_brace_template_syntax,
-    treat_chevron_percent_as_opaque: cfg.preserve_chevron_percent_template_syntax,
-  });
-  let parsed = parse_content(&mut code, Namespace::Html, EMPTY_SLICE, EMPTY_SLICE);
-  let mut out = Vec::with_capacity(src.len());
-  minify_content(
-    cfg,
-    &mut out,
-    Namespace::Html,
-    false,
-    EMPTY_SLICE,
-    parsed.children,
-  );
-  out.shrink_to_fit();
-  out
+    let mut code = Code::new_with_opts(
+        src,
+        ParseOpts {
+            treat_brace_as_opaque: cfg.preserve_brace_template_syntax,
+            treat_chevron_percent_as_opaque: cfg.preserve_chevron_percent_template_syntax,
+        },
+    );
+    let parsed = parse_content(&mut code, Namespace::Html, EMPTY_SLICE, EMPTY_SLICE);
+    let mut out = Vec::with_capacity(src.len());
+    minify_content(
+        cfg,
+        &mut out,
+        Namespace::Html,
+        false,
+        EMPTY_SLICE,
+        parsed.children,
+    );
+    out.shrink_to_fit();
+    out
 }
 
 pub fn canonicalise<T: Write>(out: &mut T, src: &[u8]) -> std::io::Result<()> {
-  let mut code = Code::new(src);
-  let parsed = parse_content(&mut code, Namespace::Html, EMPTY_SLICE, EMPTY_SLICE);
-  for c in parsed.children {
-    c14n_serialise_ast(out, &c)?;
-  }
-  Ok(())
+    let mut code = Code::new(src);
+    let parsed = parse_content(&mut code, Namespace::Html, EMPTY_SLICE, EMPTY_SLICE);
+    for c in parsed.children {
+        c14n_serialise_ast(out, &c)?;
+    }
+    Ok(())
 }
