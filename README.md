@@ -14,6 +14,7 @@ Changes include, but are not limited to:
 - Uses [OXC](https://oxc.rs/) for JavaScript minification over [minify-js](https://github.com/wilsonzlin/minify-js)
 - Does not support templating syntax
 - Less configuration options
+- No options that might leave the output not spec compliant
 
 View the [changelog](./CHANGELOG.md) to see the latest updates.
 
