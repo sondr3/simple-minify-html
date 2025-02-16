@@ -82,18 +82,6 @@ fn test_keep_input_type_text_attr() {
 }
 
 #[test]
-fn test_minification_of_doctype() {
-    let mut cfg = Cfg::new();
-    cfg.minify_doctype = true;
-    eval_with_cfg(b"<!DOCTYPE html><div>", b"<!doctypehtml><div>", &cfg);
-    eval_with_cfg(
-        b"<!DOCTYPE html SYSTEM 'about:legacy-compat'><div>",
-        b"<!doctypehtml SYSTEM 'about:legacy-compat'><div>",
-        &cfg,
-    );
-}
-
-#[test]
 fn test_removal_of_empty_closing_tag() {
     eval(b"<body><p>1</><p>2</body>", b"<body><p>1<p>2");
 }

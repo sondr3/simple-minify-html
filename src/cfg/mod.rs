@@ -18,8 +18,6 @@ pub struct Cfg {
     pub keep_input_type_text_attr: bool,
     /// Keep SSI comments.
     pub keep_ssi_comments: bool,
-    /// Minify DOCTYPEs. Minified DOCTYPEs may not be spec compliant, but will still be parsed correctly by almost all browsers.
-    pub minify_doctype: bool,
     /// Remove all bangs.
     pub remove_bangs: bool,
     /// Remove all processing instructions.
@@ -35,6 +33,5 @@ impl Cfg {
         self.allow_noncompliant_unquoted_attribute_values = true;
         self.allow_optimal_entities = true;
         self.allow_removing_spaces_between_attributes = true;
-        self.minify_doctype = true;
     }
 }
