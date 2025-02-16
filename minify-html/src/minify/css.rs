@@ -1,10 +1,18 @@
+#[cfg(feature = "lightningcss")]
 use std::str::from_utf8;
 
+#[cfg(feature = "lightningcss")]
 use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleSheet};
 use minify_html_common::whitespace::trimmed;
 
 use crate::cfg::Cfg;
 
+#[cfg(not(feature = "lightningcss"))]
+pub fn minify_css(_cfg: &Cfg, out: &mut Vec<u8>, code: &[u8]) {
+    out.extend_from_slice(trimmed(code));
+}
+
+#[cfg(feature = "lightningcss")]
 pub fn minify_css(cfg: &Cfg, out: &mut Vec<u8>, code: &[u8]) {
     if cfg.minify_css {
         let popt = PrinterOptions {
