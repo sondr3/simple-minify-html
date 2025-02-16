@@ -38,16 +38,17 @@ mod whitespace;
 /// let mut code: &[u8] = b"<p>  Hello, world!  </p>";
 /// let mut cfg = Cfg::new();
 /// cfg.keep_comments = true;
-/// let minified = minify(&code, &cfg);
+/// let minified = minify(&code, Some(cfg));
 /// assert_eq!(minified, b"<p>Hello, world!".to_vec());
 /// ```
 #[must_use]
-pub fn minify(src: &[u8], cfg: &Cfg) -> Vec<u8> {
+pub fn minify(src: &[u8], cfg: Option<Cfg>) -> Vec<u8> {
     let mut code = Code::new_with_opts(src);
     let parsed = parse_content(&mut code, Namespace::Html, EMPTY_SLICE, EMPTY_SLICE);
     let mut out = Vec::with_capacity(src.len());
+    let cfg = cfg.unwrap_or(Cfg::default());
     minify_content(
-        cfg,
+        &cfg,
         &mut out,
         Namespace::Html,
         false,

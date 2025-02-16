@@ -8,33 +8,33 @@ use crate::tests::helpers::create_common_css_test_data;
 use crate::tests::helpers::create_common_js_test_data;
 use crate::{cfg::Cfg, minify, tests::helpers::create_common_test_data};
 
-pub fn eval_with_cfg(src: &'static [u8], expected: &'static [u8], cfg: &Cfg) {
-    let min = minify(&src, cfg);
+pub fn eval_with_cfg(src: &'static [u8], expected: &'static [u8], cfg: Cfg) {
+    let min = minify(&src, Some(cfg));
     assert_eq!(from_utf8(&min).unwrap(), from_utf8(expected).unwrap(),);
 }
 
 #[cfg(feature = "js")]
 pub fn eval_with_js_min(src: &'static [u8], expected: &'static [u8]) -> () {
     let cfg = Cfg::new();
-    eval_with_cfg(src, expected, &cfg);
+    eval_with_cfg(src, expected, cfg);
 }
 
 #[cfg(feature = "css")]
 pub fn eval_with_css_min(src: &'static [u8], expected: &'static [u8]) -> () {
     let cfg = Cfg::new();
-    eval_with_cfg(src, expected, &cfg);
+    eval_with_cfg(src, expected, cfg);
 }
 
 pub fn eval(src: &'static [u8], expected: &'static [u8]) {
     let mut cfg = Cfg::new();
     // Most common tests assume the following minifications aren't done.
     cfg.keep_html_and_head_opening_tags = true;
-    eval_with_cfg(src, expected, &cfg);
+    eval_with_cfg(src, expected, cfg);
 }
 
 // NOTE: This is different to `eval` as that enables `keep_html_and_head_opening_tags`.
 fn eval_without_keep_html_head(src: &'static [u8], expected: &'static [u8]) -> () {
-    eval_with_cfg(src, expected, &Cfg::new());
+    eval_with_cfg(src, expected, Cfg::new());
 }
 
 #[test]
@@ -57,7 +57,7 @@ fn test_keep_ssi_comments() {
     eval(b"<!--#include >", b"");
     let mut cfg = Cfg::default();
     cfg.keep_ssi_comments = true;
-    eval_with_cfg(b"<!--#include >", b"<!--#include >", &cfg);
+    eval_with_cfg(b"<!--#include >", b"<!--#include >", cfg);
 }
 
 #[test]
@@ -65,7 +65,7 @@ fn test_keep_input_type_text_attr() {
     eval(b"<input type=\"text\">", b"<input>");
     let mut cfg = Cfg::default();
     cfg.keep_input_type_text_attr = true;
-    eval_with_cfg(b"<input type=\"TExt\">", b"<input type=text>", &cfg);
+    eval_with_cfg(b"<input type=\"TExt\">", b"<input type=text>", cfg);
 }
 
 #[test]
