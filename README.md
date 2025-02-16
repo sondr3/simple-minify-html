@@ -28,6 +28,28 @@ simple-minify-html = "0.15.0"
 
 Check out the [docs](https://docs.rs/simple-minify-html) for API and usage examples.
 
+## Features
+
+### JavaScript minification
+
+To enable minification of JavaScript, enable the `js` feature and this will
+automatically be handled:
+
+```toml
+[dependencies]
+simple-minify-html = { version = "0.15.0", features = ["js"] }
+```
+
+### CSS minification
+
+To enable minification of JavaScript, enable the `js` feature and this will
+automatically be handled:
+
+```toml
+[dependencies]
+simple-minify-html = { version = "0.15.0", features = ["css"] }
+```
+
 ## Minification
 
 ### Spec compliance

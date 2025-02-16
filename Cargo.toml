@@ -1,6 +1,6 @@
 [package]
 name = "simple-minify-html"
-description = "Extremely fast and smart HTML + JS + CSS minifier"
+description = "Extremely fast and smart fork of minify-html"
 license = "MIT"
 homepage = "https://github.com/sondr3/simple-minify-html"
 readme = "README.md"
@@ -9,10 +9,10 @@ categories = ["compression", "development-tools::build-utils", "web-programming"
 repository = "https://github.com/sondr3/simple-minify-html.git"
 version = "0.15.0"
 authors = ["Wilson Lin <code@wilsonl.in>", "Sondre Aasemoen <sondre@eons.io>"]
-edition = "2018"
+edition = "2021"
 
 [badges]
-maintenance = { status = "actively-developed" }
+maintenance = { status = "experimental" }
 
 [features]
 css = ["dep:lightningcss"]
