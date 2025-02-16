@@ -2,12 +2,11 @@ use crate::{
     ast::RcdataContentType,
     entity::encode::encode_entities,
     tag::{TAG_TEXTAREA_END, TAG_TITLE_END},
-    Cfg,
 };
 
-pub fn minify_rcdata(cfg: &Cfg, out: &mut Vec<u8>, typ: RcdataContentType, text: &[u8]) {
+pub fn minify_rcdata(out: &mut Vec<u8>, typ: RcdataContentType, text: &[u8]) {
     // Encode entities, since they're still decoded by the browser.
-    let html = encode_entities(text, false, !cfg.allow_optimal_entities);
+    let html = encode_entities(text, false);
 
     // Since the text has been decoded, there may be unintentional matches to end tags that we must escape.
     let html = match typ {
@@ -17,20 +16,8 @@ pub fn minify_rcdata(cfg: &Cfg, out: &mut Vec<u8>, typ: RcdataContentType, text:
     .replace_all_bytes(
         &html,
         &[match typ {
-            RcdataContentType::Textarea => {
-                if cfg.allow_optimal_entities {
-                    b"&LT/textarea".as_slice()
-                } else {
-                    b"&lt;/textarea".as_slice()
-                }
-            }
-            RcdataContentType::Title => {
-                if cfg.allow_optimal_entities {
-                    b"&LT/title".as_slice()
-                } else {
-                    b"&lt;/title".as_slice()
-                }
-            }
+            RcdataContentType::Textarea => b"&lt;/textarea".as_slice(),
+            RcdataContentType::Title => b"&lt;/title".as_slice(),
         }],
     );
 

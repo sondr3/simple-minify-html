@@ -4,8 +4,6 @@
 pub struct Cfg {
     /// Allow unquoted attribute values in the output to contain characters prohibited by the [WHATWG specification](https://html.spec.whatwg.org/multipage/syntax.html#attributes-2). These will still be parsed correctly by almost all browsers.
     pub allow_noncompliant_unquoted_attribute_values: bool,
-    /// Allow some minifications around entities that may not pass validation, but will still be parsed correctly by almost all browsers.
-    pub allow_optimal_entities: bool,
     /// Do not omit closing tags when possible.
     pub keep_closing_tags: bool,
     /// Keep all comments.
@@ -29,6 +27,5 @@ impl Cfg {
 
     pub fn enable_possibly_noncompliant(&mut self) {
         self.allow_noncompliant_unquoted_attribute_values = true;
-        self.allow_optimal_entities = true;
     }
 }

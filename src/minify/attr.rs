@@ -8,35 +8,12 @@ use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, Sty
 
 use crate::{
     entity::encode::encode_entities,
-    gen::{attrs::ATTRS, codepoints::DIGIT},
+    gen::attrs::ATTRS,
     pattern::Replacer,
     spec::{script::JAVASCRIPT_MIME_TYPES, tag::ns::Namespace},
     whitespace::{collapse_whitespace, left_trim, remove_all_whitespace, right_trim},
     Cfg,
 };
-
-fn build_double_quoted_replacer() -> Replacer {
-    let mut patterns = Vec::<Vec<u8>>::new();
-    let mut replacements = Vec::<Vec<u8>>::new();
-
-    // Replace all `"` with `&#34`, unless the quote is followed by a digit or semicolon,
-    // in which case add a semicolon to the encoded entity.
-    for c in "0123456789;".bytes() {
-        patterns.push(vec![b'"', c]);
-        replacements.push(vec![b'&', b'#', b'3', b'4', b';', c]);
-    }
-    patterns.push(b"\"".to_vec());
-    replacements.push(b"&#34".to_vec());
-
-    Replacer::new(
-        AhoCorasickBuilder::new()
-            .kind(Some(AhoCorasickKind::DFA))
-            .match_kind(MatchKind::LeftmostLongest)
-            .build(patterns)
-            .unwrap(),
-        replacements,
-    )
-}
 
 // To pass validation, entities MUST end with a semicolon.
 fn build_whatwg_double_quoted_replacer() -> Replacer {
@@ -46,29 +23,6 @@ fn build_whatwg_double_quoted_replacer() -> Replacer {
             .build([b"\""])
             .unwrap(),
         vec![b"&#34;".to_vec()],
-    )
-}
-
-fn build_single_quoted_replacer() -> Replacer {
-    let mut patterns = Vec::<Vec<u8>>::new();
-    let mut replacements = Vec::<Vec<u8>>::new();
-
-    // Replace all `'` with `&#39`, unless the quote is followed by a digit or semicolon,
-    // in which case add a semicolon to the encoded entity.
-    for c in "0123456789;".bytes() {
-        patterns.push(vec![b'\'', c]);
-        replacements.push(vec![b'&', b'#', b'3', b'9', b';', c]);
-    }
-    patterns.push(b"'".to_vec());
-    replacements.push(b"&#39".to_vec());
-
-    Replacer::new(
-        AhoCorasickBuilder::new()
-            .kind(Some(AhoCorasickKind::DFA))
-            .match_kind(MatchKind::LeftmostLongest)
-            .build(patterns)
-            .unwrap(),
-        replacements,
     )
 }
 
@@ -92,46 +46,6 @@ static WS: &[(u8, &[u8])] = &[
     (b'\x20', b"&#32"),
 ];
 
-fn build_unquoted_replacer() -> Replacer {
-    let mut patterns = Vec::<Vec<u8>>::new();
-    let mut replacements = Vec::<Vec<u8>>::new();
-
-    // Replace all whitespace with a numeric entity, unless the whitespace is followed by a digit or semicolon,
-    // in which case add a semicolon to the encoded entity.
-    for c in "0123456789;".bytes() {
-        for &(ws, rep) in WS {
-            patterns.push(vec![ws, c]);
-            replacements.push({
-                let mut ent = rep.to_vec();
-                ent.push(b';');
-                ent.push(c);
-                ent
-            });
-        }
-    }
-    for &(ws, rep) in WS {
-        patterns.push(vec![ws]);
-        replacements.push(rep.to_vec());
-    }
-
-    // Replace all `>` with `&GT`, unless the chevron is followed by a semicolon,
-    // in which case add a semicolon to the encoded entity.
-    // Use `&GT` instead of `&gt` as `&gt` has more conflicting entities e.g. `&gtcc;`, `&gtdot;`.
-    patterns.push(b">;".to_vec());
-    replacements.push(b"&GT;;".to_vec());
-    patterns.push(b">".to_vec());
-    replacements.push(b"&GT".to_vec());
-
-    Replacer::new(
-        AhoCorasickBuilder::new()
-            .kind(Some(AhoCorasickKind::DFA))
-            .match_kind(MatchKind::LeftmostLongest)
-            .build(patterns)
-            .unwrap(),
-        replacements,
-    )
-}
-
 // If spec compliance is required, these characters must also be encoded in an unquoted attr value,
 // as well as whitespace, `<`, and `>`.
 static WHATWG_UNQUOTED: &[(u8, &[u8])] = &[
@@ -140,73 +54,6 @@ static WHATWG_UNQUOTED: &[(u8, &[u8])] = &[
     (b'=', b"&#61"),
     (b'`', b"&#6"),
 ];
-
-// This encodes more characters in the value but may not end those entities with semicolons.
-fn build_semi_whatwg_unquoted_replacer() -> Replacer {
-    let mut patterns = Vec::<Vec<u8>>::new();
-    let mut replacements = Vec::<Vec<u8>>::new();
-
-    // Replace all whitespace with a numeric entity, unless the whitespace is followed by a digit or semicolon,
-    // in which case add a semicolon to the encoded entity.
-    for c in "0123456789;".bytes() {
-        for &(ws, rep) in WS {
-            patterns.push(vec![ws, c]);
-            replacements.push({
-                let mut ent = rep.to_vec();
-                ent.push(b';');
-                ent.push(c);
-                ent
-            });
-        }
-    }
-    for &(ws, rep) in WS {
-        patterns.push(vec![ws]);
-        replacements.push(rep.to_vec());
-    }
-
-    // Replace WHATWG-disallowed characters with a numeric entity, unless they're followed by a digit or semicolon,
-    // in which case add a semicolon to the encoded entity.
-    for c in "0123456789;".bytes() {
-        for &(ws, rep) in WHATWG_UNQUOTED {
-            patterns.push(vec![ws, c]);
-            replacements.push({
-                let mut ent = rep.to_vec();
-                ent.push(b';');
-                ent.push(c);
-                ent
-            });
-        }
-    }
-    for &(ws, rep) in WHATWG_UNQUOTED {
-        patterns.push(vec![ws]);
-        replacements.push(rep.to_vec());
-    }
-
-    // Replace all `<` with `&LT`, unless the chevron is followed by a semicolon,
-    // in which case add a semicolon to the encoded entity.
-    // Use `&GT` instead of `&lt` as `&lt` has more conflicting entities e.g. `&ltcc;`, `&ltdot;`.
-    patterns.push(b"<;".to_vec());
-    replacements.push(b"&LT;;".to_vec());
-    patterns.push(b"<".to_vec());
-    replacements.push(b"&LT".to_vec());
-
-    // Replace all `>` with `&GT`, unless the chevron is followed by a semicolon,
-    // in which case add a semicolon to the encoded entity.
-    // Use `&GT` instead of `&gt` as `&gt` has more conflicting entities e.g. `&gtcc;`, `&gtdot;`.
-    patterns.push(b">;".to_vec());
-    replacements.push(b"&GT;;".to_vec());
-    patterns.push(b">".to_vec());
-    replacements.push(b"&GT".to_vec());
-
-    Replacer::new(
-        AhoCorasickBuilder::new()
-            .kind(Some(AhoCorasickKind::DFA))
-            .match_kind(MatchKind::LeftmostLongest)
-            .build(patterns)
-            .unwrap(),
-        replacements,
-    )
-}
 
 // To pass validation, entities MUST end with a semicolon.
 fn build_whatwg_unquoted_replacer() -> Replacer {
@@ -251,11 +98,6 @@ fn build_whatwg_unquoted_replacer() -> Replacer {
     )
 }
 
-static DOUBLE_QUOTED_REPLACER: LazyLock<Replacer> = LazyLock::new(build_double_quoted_replacer);
-static SINGLE_QUOTED_REPLACER: LazyLock<Replacer> = LazyLock::new(build_single_quoted_replacer);
-static UNQUOTED_REPLACER: LazyLock<Replacer> = LazyLock::new(build_unquoted_replacer);
-static SEMI_WHATWG_UNQUOTED_REPLACER: LazyLock<Replacer> =
-    LazyLock::new(build_semi_whatwg_unquoted_replacer);
 static WHATWG_DOUBLE_QUOTED_REPLACER: LazyLock<Replacer> =
     LazyLock::new(build_whatwg_double_quoted_replacer);
 static WHATWG_SINGLE_QUOTED_REPLACER: LazyLock<Replacer> =
@@ -293,76 +135,33 @@ impl AttrMinifiedValue {
     }
 }
 
-pub fn encode_using_double_quotes(val: &[u8], must_end_with_semicolon: bool) -> AttrMinifiedValue {
+pub fn encode_using_double_quotes(val: &[u8]) -> AttrMinifiedValue {
     AttrMinifiedValue {
         quoted: true,
         prefix: b"\"",
-        data: if must_end_with_semicolon {
-            WHATWG_DOUBLE_QUOTED_REPLACER.replace_all(val)
-        } else {
-            DOUBLE_QUOTED_REPLACER.replace_all(val)
-        },
+        data: WHATWG_DOUBLE_QUOTED_REPLACER.replace_all(val),
         start: 0,
         suffix: b"\"",
     }
 }
 
-pub fn encode_using_single_quotes(val: &[u8], must_end_with_semicolon: bool) -> AttrMinifiedValue {
+pub fn encode_using_single_quotes(val: &[u8]) -> AttrMinifiedValue {
     AttrMinifiedValue {
         quoted: true,
         prefix: b"'",
-        data: if must_end_with_semicolon {
-            WHATWG_SINGLE_QUOTED_REPLACER.replace_all(val)
-        } else {
-            SINGLE_QUOTED_REPLACER.replace_all(val)
-        },
+        data: WHATWG_SINGLE_QUOTED_REPLACER.replace_all(val),
         start: 0,
         suffix: b"'",
     }
 }
 
-pub fn encode_unquoted(
-    val: &[u8],
-    must_end_with_semicolon: bool,
-    no_illegal_chars: bool,
-) -> AttrMinifiedValue {
-    if must_end_with_semicolon {
-        AttrMinifiedValue {
-            quoted: false,
-            prefix: b"",
-            data: WHATWG_UNQUOTED_REPLACER.replace_all(val),
-            start: 0,
-            suffix: b"",
-        }
-    } else if no_illegal_chars {
-        AttrMinifiedValue {
-            quoted: false,
-            prefix: b"",
-            data: SEMI_WHATWG_UNQUOTED_REPLACER.replace_all(val),
-            start: 0,
-            suffix: b"",
-        }
-    } else {
-        let data = UNQUOTED_REPLACER.replace_all(val);
-        let prefix: &'static [u8] = match data.first() {
-            Some(b'"') => match data.get(1) {
-                Some(&c2) if DIGIT[c2] || c2 == b';' => b"&#34;",
-                _ => b"&#34",
-            },
-            Some(b'\'') => match data.get(1) {
-                Some(&c2) if DIGIT[c2] || c2 == b';' => b"&#39;",
-                _ => b"&#39",
-            },
-            _ => b"",
-        };
-        let start = if !prefix.is_empty() { 1 } else { 0 };
-        AttrMinifiedValue {
-            quoted: false,
-            prefix,
-            data,
-            start,
-            suffix: b"",
-        }
+pub fn encode_unquoted(val: &[u8]) -> AttrMinifiedValue {
+    AttrMinifiedValue {
+        quoted: false,
+        prefix: b"",
+        data: WHATWG_UNQUOTED_REPLACER.replace_all(val),
+        start: 0,
+        suffix: b"",
     }
 }
 
@@ -454,20 +253,15 @@ pub fn minify_attr(
         return AttrMinified::NoValue;
     };
 
-    let must_end_with_semicolon = !cfg.allow_optimal_entities;
-    let encoded = encode_entities(&value_raw, true, must_end_with_semicolon);
+    let encoded = encode_entities(&value_raw, true);
 
     // When lengths are equal, prefer double quotes to all and single quotes to unquoted.
-    let mut min = encode_using_double_quotes(&encoded, must_end_with_semicolon);
-    let sq = encode_using_single_quotes(&encoded, must_end_with_semicolon);
+    let mut min = encode_using_double_quotes(&encoded);
+    let sq = encode_using_single_quotes(&encoded);
     if sq.len() < min.len() {
         min = sq;
     };
-    let uq = encode_unquoted(
-        &encoded,
-        must_end_with_semicolon,
-        !cfg.allow_noncompliant_unquoted_attribute_values,
-    );
+    let uq = encode_unquoted(&encoded);
     if uq.len() < min.len() {
         min = uq;
     };

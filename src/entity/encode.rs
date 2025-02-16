@@ -24,11 +24,7 @@ static SHORTER_ENCODED_ENTITIES_ENCODED_SEARCHER: LazyLock<AhoCorasick> = LazyLo
 // Encodes ampersands when necessary, as well as UTF-8 sequences that are shorter encoded.
 // Does not handle context-specific escaping e.g. `>`, `'`, `"`.
 // Set {@param must_end_with_semicolon} to true to pass validation.
-pub fn encode_entities(
-    mut code: &[u8],
-    in_attr_val: bool,
-    must_end_with_semicolon: bool,
-) -> Vec<u8> {
+pub fn encode_entities(mut code: &[u8], in_attr_val: bool) -> Vec<u8> {
     let mut res = Vec::<u8>::new();
     while !code.is_empty() {
         let (before, matched) = match memchr(b'&', code) {
@@ -53,11 +49,7 @@ pub fn encode_entities(
                             0
                         }
                         _ => {
-                            if must_end_with_semicolon {
-                                res.extend_from_slice(b"&amp;");
-                            } else {
-                                res.extend_from_slice(b"&amp");
-                            };
+                            res.extend_from_slice(b"&amp;");
                             // Skip the leading ampersand, as it will be replaced by `&amp`.
                             1
                         }

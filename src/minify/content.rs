@@ -1,13 +1,12 @@
 use std::sync::LazyLock;
 
-use aho_corasick::{AhoCorasickBuilder, AhoCorasickKind, MatchKind};
+use aho_corasick::{AhoCorasickBuilder, AhoCorasickKind};
 
 use super::rcdata::minify_rcdata;
 use crate::{
     ast::{NodeData, ScriptOrStyleLang},
     cfg::Cfg,
     entity::encode::encode_entities,
-    gen::codepoints::TAG_NAME_CHAR,
     minify::{
         bang::minify_bang, comment::minify_comment, css::minify_css, doctype::minify_doctype,
         element::minify_element, instruction::minify_instruction, js::minify_js,
@@ -20,29 +19,6 @@ use crate::{
     whitespace::{collapse_whitespace, is_all_whitespace, left_trim, right_trim},
 };
 
-fn build_optimal_chevron_replacer() -> Replacer {
-    let mut patterns = Vec::<Vec<u8>>::new();
-    let mut replacements = Vec::<Vec<u8>>::new();
-
-    // Replace all `<` with a `&LT` if it's followed by a TAG_NAME_CHAR, `/`, `!`, or `?`.
-    for c in 0u8..128u8 {
-        // TODO Create single lookup.
-        if TAG_NAME_CHAR[c] || c == b'/' || c == b'!' || c == b'?' {
-            patterns.push(vec![b'<', c]);
-            replacements.push(vec![b'&', b'L', b'T', c]);
-        };
-    }
-
-    Replacer::new(
-        AhoCorasickBuilder::new()
-            .kind(Some(AhoCorasickKind::DFA))
-            .match_kind(MatchKind::LeftmostLongest)
-            .build(patterns)
-            .unwrap(),
-        replacements,
-    )
-}
-
 fn build_whatwg_chevron_replacer() -> Replacer {
     Replacer::new(
         AhoCorasickBuilder::new()
@@ -53,7 +29,6 @@ fn build_whatwg_chevron_replacer() -> Replacer {
     )
 }
 
-static OPTIMAL_CHEVRON_REPLACER: LazyLock<Replacer> = LazyLock::new(build_optimal_chevron_replacer);
 static WHATWG_CHEVRON_REPLACER: LazyLock<Replacer> = LazyLock::new(build_whatwg_chevron_replacer);
 
 pub fn minify_content(
@@ -153,7 +128,7 @@ pub fn minify_content(
                 children,
             ),
             NodeData::Instruction { code, ended } => minify_instruction(cfg, out, &code, ended),
-            NodeData::RcdataContent { typ, text } => minify_rcdata(cfg, out, typ, &text),
+            NodeData::RcdataContent { typ, text } => minify_rcdata(out, typ, &text),
             NodeData::ScriptOrStyleContent { code, lang: _ } if code.is_empty() => {}
             NodeData::ScriptOrStyleContent { code, lang } => match lang {
                 ScriptOrStyleLang::CSS => minify_css(out, &code),
@@ -162,12 +137,8 @@ pub fn minify_content(
                 ScriptOrStyleLang::JSModule => minify_js(out, &code),
             },
             NodeData::Text { value } => {
-                let min = encode_entities(&value, false, !cfg.allow_optimal_entities);
-                let min = if cfg.allow_optimal_entities {
-                    OPTIMAL_CHEVRON_REPLACER.replace_all(&min)
-                } else {
-                    WHATWG_CHEVRON_REPLACER.replace_all(&min)
-                };
+                let min = encode_entities(&value, false);
+                let min = WHATWG_CHEVRON_REPLACER.replace_all(&min);
                 out.extend_from_slice(&min);
             }
         };
