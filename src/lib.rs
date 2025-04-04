@@ -6,14 +6,14 @@ pub use crate::cfg::Cfg;
 use crate::{
     ast::c14n::c14n_serialise_ast,
     minify::content::minify_content,
-    parse::{content::parse_content, Code},
-    spec::tag::{ns::Namespace, EMPTY_SLICE},
+    parse::{Code, content::parse_content},
+    spec::tag::{EMPTY_SLICE, ns::Namespace},
 };
 
 mod ast;
 mod cfg;
+mod code_gen;
 mod entity;
-mod gen;
 mod minify;
 mod parse;
 mod pattern;

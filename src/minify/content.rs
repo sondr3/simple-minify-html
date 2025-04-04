@@ -14,7 +14,7 @@ use crate::{
     pattern::Replacer,
     spec::tag::{
         ns::Namespace,
-        whitespace::{get_whitespace_minification_for_tag, WhitespaceMinification},
+        whitespace::{WhitespaceMinification, get_whitespace_minification_for_tag},
     },
     whitespace::{collapse_whitespace, is_all_whitespace, left_trim, right_trim},
 };

@@ -3,10 +3,10 @@ use rustc_hash::FxHashMap;
 use crate::{
     ast::{AttrVal, ElementClosingTag, NodeData},
     parse::{
-        element::{parse_element, parse_tag, ParsedTag},
         Code,
+        element::{ParsedTag, parse_element, parse_tag},
     },
-    spec::tag::{ns::Namespace, EMPTY_SLICE},
+    spec::tag::{EMPTY_SLICE, ns::Namespace},
 };
 
 fn val(v: &[u8]) -> AttrVal {

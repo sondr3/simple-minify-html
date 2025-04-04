@@ -91,7 +91,7 @@ fn gen_attrs_rs(html_data: &HtmlData) -> String {
     }
 
     pub struct ByNamespace {
-        // Make pub so this struct can be statically created in gen/attrs.rs.
+        // Make pub so this struct can be statically created in code_gen/attrs.rs.
         pub html: Option<AttrMapEntry>,
         pub svg: Option<AttrMapEntry>,
     }
@@ -266,7 +266,7 @@ impl<I: IntoIterator<Item = u8>> From<I> for CodePoints {
 // See https://infra.spec.whatwg.org/#code-points for spec.
 // TODO Full-system benchmark: are these LUTs actually faster than comparisons/branching? Esp. LUTs for less than 3 characters/comparisons.
 fn gen_codepoints_rs() -> String {
-    // Also update gen/tries.json when changing whitespace definition.
+    // Also update code_gen/tries.json when changing whitespace definition.
     let whitespace: CodePoints = [0x09u8, 0x0a, 0x0c, 0x0d, 0x20].into();
     let c0_control: CodePoints = (0u8..=0x1f).into();
     let control = c0_control + (0x7f..=0x9f);

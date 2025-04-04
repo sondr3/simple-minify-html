@@ -4,7 +4,7 @@ use aho_corasick::{AhoCorasick, AhoCorasickBuilder, AhoCorasickKind};
 
 use crate::{
     ast::{NodeData, ScriptOrStyleLang},
-    parse::{content::ParsedContent, Code},
+    parse::{Code, content::ParsedContent},
 };
 
 static END: LazyLock<AhoCorasick> = LazyLock::new(|| {

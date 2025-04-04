@@ -18,11 +18,11 @@ use std::char::from_u32;
 use memchr::memchr;
 
 use crate::{
-    gen::{
+    code_gen::{
         codepoints::{
-            Lookup, ALPHANUMERIC_OR_EQUALS, DIGIT, HEX_DIGIT, LOWER_HEX_ALPHA, UPPER_HEX_ALPHA,
+            ALPHANUMERIC_OR_EQUALS, DIGIT, HEX_DIGIT, LOWER_HEX_ALPHA, Lookup, UPPER_HEX_ALPHA,
         },
-        entities::{EntityType, ENTITY},
+        entities::{ENTITY, EntityType},
     },
     pattern::TrieNodeMatch,
 };

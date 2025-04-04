@@ -1,4 +1,4 @@
-use crate::gen::codepoints::Lookup;
+use crate::code_gen::codepoints::Lookup;
 
 pub mod bang;
 pub mod comment;

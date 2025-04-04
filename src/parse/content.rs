@@ -4,16 +4,16 @@ use aho_corasick::{AhoCorasick, AhoCorasickBuilder, AhoCorasickKind, MatchKind};
 
 use crate::{
     ast::NodeData,
+    code_gen::codepoints::TAG_NAME_CHAR,
     entity::decode::decode_entities,
-    gen::codepoints::TAG_NAME_CHAR,
     parse::{
+        Code,
         bang::parse_bang,
         comment::parse_comment,
         content::ContentType::*,
         doctype::parse_doctype,
         element::{parse_element, parse_tag, peek_tag_name},
         instruction::parse_instruction,
-        Code,
     },
     spec::tag::{
         ns::Namespace,

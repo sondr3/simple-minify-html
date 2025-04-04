@@ -1,7 +1,7 @@
 use crate::{
     ast::{NodeData, RcdataContentType},
     entity::decode::decode_entities,
-    parse::{content::ParsedContent, Code},
+    parse::{Code, content::ParsedContent},
     tag::TAG_TEXTAREA_END,
 };
 

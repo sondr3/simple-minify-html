@@ -4,7 +4,7 @@ use crate::{
     ast::{AttrVal, ElementClosingTag, NodeData},
     cfg::Cfg,
     minify::{
-        attr::{minify_attr, AttrMinified},
+        attr::{AttrMinified, minify_attr},
         content::minify_content,
     },
     spec::tag::{

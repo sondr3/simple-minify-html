@@ -7,12 +7,12 @@ use aho_corasick::{AhoCorasickBuilder, AhoCorasickKind, MatchKind};
 use lightningcss::stylesheet::{MinifyOptions, ParserOptions, PrinterOptions, StyleAttribute};
 
 use crate::{
+    Cfg,
+    code_gen::attrs::ATTRS,
     entity::encode::encode_entities,
-    gen::attrs::ATTRS,
     pattern::Replacer,
     spec::{script::JAVASCRIPT_MIME_TYPES, tag::ns::Namespace},
     whitespace::{collapse_whitespace, left_trim, remove_all_whitespace, right_trim},
-    Cfg,
 };
 
 // To pass validation, entities MUST end with a semicolon.

@@ -4,10 +4,10 @@ use aho_corasick::{AhoCorasick, AhoCorasickBuilder, AhoCorasickKind, MatchKind};
 use memchr::memchr;
 
 use crate::{
-    gen::{
+    code_gen::{
         codepoints::ALPHANUMERIC_OR_EQUALS,
         entities::{
-            EntityType, ENTITY, SHORTER_ENCODED_ENTITIES_DECODED, SHORTER_ENCODED_ENTITIES_ENCODED,
+            ENTITY, EntityType, SHORTER_ENCODED_ENTITIES_DECODED, SHORTER_ENCODED_ENTITIES_ENCODED,
         },
     },
     pattern::TrieNodeMatch,

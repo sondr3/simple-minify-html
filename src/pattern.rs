@@ -3,7 +3,7 @@ use aho_corasick::AhoCorasick;
 // Can't use pub const fn constructor due to Copy trait, so allow directly creating struct publicly for now.
 pub struct TrieNode<V: 'static + Copy> {
     // Using a children array of size 256 would probably be fastest, but waste too much memory and cause slow compiles
-    // and large binaries. Instead, we only store the children between the first and last defined (see `gen/trie.ts`).
+    // and large binaries. Instead, we only store the children between the first and last defined (see `code_gen/trie.ts`).
     // When getting a child, use `index - offset`.
     pub offset: usize,
     pub value: Option<V>,

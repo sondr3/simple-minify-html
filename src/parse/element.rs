@@ -7,18 +7,18 @@ use rustc_hash::FxHashMap;
 
 use crate::{
     ast::{AttrVal, ElementClosingTag, NodeData, ScriptOrStyleLang},
-    entity::decode::decode_entities,
-    gen::codepoints::{
+    code_gen::codepoints::{
         ATTR_QUOTE, DOUBLE_QUOTE, NOT_UNQUOTED_ATTR_VAL_CHAR, SINGLE_QUOTE, TAG_NAME_CHAR,
         WHITESPACE, WHITESPACE_OR_SLASH, WHITESPACE_OR_SLASH_OR_EQUALS_OR_RIGHT_CHEVRON,
     },
+    entity::decode::decode_entities,
     parse::{
-        content::{parse_content, ParsedContent},
+        Code,
+        content::{ParsedContent, parse_content},
         script::parse_script_content,
         style::parse_style_content,
         textarea::parse_textarea_content,
         title::parse_title_content,
-        Code,
     },
     spec::{
         script::JAVASCRIPT_MIME_TYPES,
