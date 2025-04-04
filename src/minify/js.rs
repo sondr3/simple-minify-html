@@ -36,7 +36,7 @@ fn minify(allocator: &Allocator, source: &str, source_type: SourceType) -> Strin
             minify: true,
             ..CodegenOptions::default()
         })
-        .with_symbol_table(ret.symbol_table)
+        .with_scoping(ret.scoping)
         .build(&program)
         .code
 }
