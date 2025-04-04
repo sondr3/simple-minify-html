@@ -22,7 +22,7 @@ View the [changelog](./CHANGELOG.md) to see the latest updates.
 
 ```toml
 [dependencies]
-simple-minify-html = "0.16.0"
+simple-minify-html = "0.17.0"
 ```
 
 # Use
@@ -38,7 +38,7 @@ automatically be handled:
 
 ```toml
 [dependencies]
-simple-minify-html = { version = "0.16.0", features = ["js"] }
+simple-minify-html = { version = "0.17.0", features = ["js"] }
 ```
 
 ### CSS minification
@@ -48,7 +48,7 @@ automatically be handled:
 
 ```toml
 [dependencies]
-simple-minify-html = { version = "0.16.0", features = ["css"] }
+simple-minify-html = { version = "0.17.0", features = ["css"] }
 ```
 
 ## Minification

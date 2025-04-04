@@ -1,13 +1,13 @@
 [package]
 name = "simple-minify-html"
-description = "Extremely fast and smart fork of minify-html"
+description = "Extremely fast and simple fork of minify-html"
 license = "MIT"
 homepage = "https://github.com/sondr3/simple-minify-html"
 readme = "README.md"
 keywords = ["html", "compress", "minifier", "js", "css"]
 categories = ["compression", "development-tools::build-utils", "web-programming"]
 repository = "https://github.com/sondr3/simple-minify-html.git"
-version = "0.16.0"
+version = "0.17.0"
 authors = ["Wilson Lin <code@wilsonl.in>", "Sondre Aasemoen <sondre@eons.io>"]
 edition = "2024"
 

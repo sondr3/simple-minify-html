@@ -1,3 +1,20 @@
+## v0.17.0
+
+> 2025-04-04
+
+## Summary
+
+Version and edition bump, and a fix
+for [minifying HTML5 doctypes](https://github.com/sondr3/simple-minify-html/issues/1).
+
+### Commits
+
+- [[`12157a6`](https://github.com/sondr3/simple-minify-html/commit/12157a6)] Ignore legacy doctype data when minifying
+- [[`5fd8dc0`](https://github.com/sondr3/simple-minify-html/commit/5fd8dc0)] Fix JS minification
+- [[`90924de`](https://github.com/sondr3/simple-minify-html/commit/90924de)] Remove unused config options
+- [[`f248add`](https://github.com/sondr3/simple-minify-html/commit/f248add)] Upgrade to the 2024 edition
+- [[`1f8776b`](https://github.com/sondr3/simple-minify-html/commit/1f8776b)] Bump dependencies
+
 ## v0.16.0
 
 > 2025-02-16
