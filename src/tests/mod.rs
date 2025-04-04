@@ -158,3 +158,11 @@ fn test_style_attr_minification() {
     // `style` attributes are removed if fully minified away.
     eval_with_css_min(br#"<div style="  /*  */   "></div>"#, br#"<div></div>"#);
 }
+
+#[test]
+fn test_doctype_minification() {
+    eval(
+        br#"<!doctype html SYSTEM "about:legacy-compat">"#,
+        br#"<!doctype html>"#,
+    )
+}

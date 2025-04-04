@@ -106,7 +106,7 @@ pub fn minify_content(
         match c {
             NodeData::Bang { code, ended } => minify_bang(cfg, out, &code, ended),
             NodeData::Comment { code, ended } => minify_comment(cfg, out, &code, ended),
-            NodeData::Doctype { legacy, ended } => minify_doctype(out, &legacy, ended),
+            NodeData::Doctype { ended } => minify_doctype(out, ended),
             NodeData::Element {
                 attributes,
                 children,

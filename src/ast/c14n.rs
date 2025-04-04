@@ -80,12 +80,8 @@ pub fn c14n_serialise_ast<T: Write>(out: &mut T, node: &NodeData) -> std::io::Re
             out.write_all(code)?;
             out.write_all(b"-->")?;
         }
-        NodeData::Doctype { legacy, .. } => {
+        NodeData::Doctype { .. } => {
             out.write_all(b"<!DOCTYPE html")?;
-            if !legacy.is_empty() {
-                out.write_all(b" ")?;
-                out.write_all(legacy)?;
-            };
             out.write_all(b">")?;
         }
         NodeData::Element {

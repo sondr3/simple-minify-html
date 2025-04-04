@@ -12,11 +12,8 @@ pub fn parse_doctype(code: &mut Code) -> NodeData {
         Some(m) => (m, 1),
         None => (code.rem(), 0),
     };
-    let data = code.copy_and_shift(len);
+    let _ = code.copy_and_shift(len);
     // It might be EOF.
     code.shift(matched);
-    NodeData::Doctype {
-        legacy: data,
-        ended: matched > 0,
-    }
+    NodeData::Doctype { ended: matched > 0 }
 }

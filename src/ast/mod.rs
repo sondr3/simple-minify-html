@@ -72,7 +72,6 @@ pub enum NodeData {
         ended: bool,
     },
     Doctype {
-        legacy: Vec<u8>,
         // If the source unexpectedly ended before `>`, we can't add it, as otherwise output could be longer than source.
         ended: bool,
     },
@@ -121,11 +120,7 @@ impl Debug for NodeData {
                 .field("code", &from_utf8(code).unwrap().to_string())
                 .field("ended", ended)
                 .finish(),
-            NodeData::Doctype { legacy, ended } => f
-                .debug_struct("Doctype")
-                .field("legacy", &from_utf8(legacy).unwrap().to_string())
-                .field("ended", ended)
-                .finish(),
+            NodeData::Doctype { ended } => f.debug_struct("Doctype").field("ended", ended).finish(),
             NodeData::Element {
                 attributes,
                 children,
