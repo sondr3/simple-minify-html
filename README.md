@@ -58,18 +58,6 @@ simple-minify-html = { version = "0.16.0", features = ["css"] }
 WHATWG is the current HTML standard and [obsoletes all previous standards](https://www.w3.org/html/). WHATWG lists
 suggested validators [here](https://whatwg.org/validator/).
 
-To minify even further, it's possible to enable options that may output HTML that doesn't fully pass validation, but is
-still interpreted and rendered correctly according to
-the [WHATWG parsing specification](https://html.spec.whatwg.org/multipage/parsing.html), which major browser engines (
-Firefox, Chrome, Safari) implement. Refer to these options:
-
-- `allow_noncompliant_unquoted_attribute_values`
-- `allow_optimal_entities`
-- `allow_removing_spaces_between_attributes`
-- `minify_doctype`
-
-In Rust, `Cfg::enable_possibly_noncompliant` can enable all of these at once.
-
 ### Whitespace
 
 minify-html has advanced context-aware whitespace minification that does things such as:
