@@ -1,7 +1,7 @@
 #[cfg(feature = "js")]
 use oxc_allocator::Allocator;
 #[cfg(feature = "js")]
-use oxc_codegen::{CodeGenerator, CodegenOptions};
+use oxc_codegen::{Codegen, CodegenOptions};
 #[cfg(feature = "js")]
 use oxc_mangler::MangleOptions;
 #[cfg(feature = "js")]
@@ -31,11 +31,8 @@ fn minify(allocator: &Allocator, source: &str, source_type: SourceType) -> Strin
         compress: Some(CompressOptions::default()),
     };
     let ret = Minifier::new(options).build(allocator, &mut program);
-    CodeGenerator::new()
-        .with_options(CodegenOptions {
-            minify: true,
-            ..CodegenOptions::default()
-        })
+    Codegen::new()
+        .with_options(CodegenOptions::minify())
         .with_scoping(ret.scoping)
         .build(&program)
         .code

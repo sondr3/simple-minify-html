@@ -20,14 +20,14 @@ js = ["dep:oxc_minifier", "oxc_allocator", "oxc_codegen", "oxc_mangler", "oxc_pa
 
 [dependencies]
 aho-corasick = "1.1"
-lightningcss = { version = "1.0.0-alpha.65", optional = true }
+lightningcss = { version = "1.0.0-alpha.66", optional = true }
 memchr = "2"
-oxc_minifier = { version = "0.62.0", optional = true }
-oxc_allocator = { version = "0.62.0", optional = true }
-oxc_codegen = { version = "0.62.0", optional = true }
-oxc_mangler = { version = "0.62.0", optional = true }
-oxc_parser = { version = "0.62.0", optional = true }
-oxc_span = { version = "0.62.0", optional = true }
+oxc_minifier = { version = "0.72.0", optional = true }
+oxc_allocator = { version = "0.72.0", optional = true }
+oxc_codegen = { version = "0.72.0", optional = true }
+oxc_mangler = { version = "0.72.0", optional = true }
+oxc_parser = { version = "0.72.0", optional = true }
+oxc_span = { version = "0.72.0", optional = true }
 rustc-hash = "2.1.1"
 
 [build-dependencies]
