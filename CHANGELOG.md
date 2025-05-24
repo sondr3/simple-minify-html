@@ -1,3 +1,15 @@
+## v0.17.1
+
+> 2025-05-24
+
+## Summary
+
+Internal version bump for minification libraries. No external changes.
+
+### Commits
+
+- [[`16f5b9b`](https://github.com/sondr3/simple-minify-html)] Bump OXC and lightningcss
+
 ## v0.17.0
 
 > 2025-04-04
