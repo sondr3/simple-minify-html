@@ -1,3 +1,17 @@
+## v0.17.2
+
+> 2025-07-13
+
+## Summary
+
+Bumping of OXC and `lightningscss`, publishing and linting fixes. No external changes.
+
+### Commits
+
+- [[`ee40326`](https://github.com/sondr3/simple-minify-html)] Fix clippy lint
+- [[`688f0f2`](https://github.com/sondr3/simple-minify-html)] Use trusted publishing for Crates.io
+- [[`2e543bd`](https://github.com/sondr3/simple-minify-html)] Bump dependencies
+
 ## v0.17.1
 
 > 2025-05-24
@@ -98,12 +112,12 @@ minification.
 - Add new options to parse and preserve common templating syntax in content source code. NOTE: The parsing is "dumb" and
   merely looks for the next subsequence in the source code that matches the closing delimiter characters. This means
   that literal closing delimiter characters (e.g. strings) and nesting may cause parsing to be incorrect.
-    - `preserve_brace_template_syntax`: When `{{`, `{#`, or `{%` are seen in content, all source code until the
-      subsequent matching closing `}}`, `#}`, or `%}` respectively gets piped through untouched.
-        - Templating engines: Pebble, Mustache, Django, Go, Jinja, Twix, Nunjucks, Handlebars, Liquid.
-    - `preserve_chevron_percent_template_syntax`: When `<%` is seen in content, all source code until the subsequent
-      matching closing `%>` gets piped through untouched.
-        - Templating engines: Sailfish, JSP, EJS, ERB.
+  - `preserve_brace_template_syntax`: When `{{`, `{#`, or `{%` are seen in content, all source code until the
+    subsequent matching closing `}}`, `#}`, or `%}` respectively gets piped through untouched.
+    - Templating engines: Pebble, Mustache, Django, Go, Jinja, Twix, Nunjucks, Handlebars, Liquid.
+  - `preserve_chevron_percent_template_syntax`: When `<%` is seen in content, all source code until the subsequent
+    matching closing `%>` gets piped through untouched.
+    - Templating engines: Sailfish, JSP, EJS, ERB.
 
 ## 0.13.3
 
@@ -120,7 +134,7 @@ minification.
 ## 0.13.0
 
 - Use [lightningcss](https://github.com/parcel-bundler/lightningcss) instead of css-minify, which is better maintained.
-    - BREAKING: The `minify_css_level_*` Cfg options no longer apply and have been removed.
+  - BREAKING: The `minify_css_level_*` Cfg options no longer apply and have been removed.
 - [onepass] Implement `Display` and `Error` for `Error` and `FriendlyError` structs.
 
 ## 0.12.0
@@ -129,8 +143,8 @@ minification.
 - Add `keep_ssi_comments` to preserve SSI comments.
 - [Ruby] BREAKING: The class method is now a global function, so call `minify_html` instead of `MinifyHtml.minify`. All
   else remains the same. This is due to migrating from Rutie (see [0.11.3](#0113)).
-    - This change was inadvertently released in patch version bumps from `0.11.3` to `0.11.5`; these gems have been
-      yanked.
+  - This change was inadvertently released in patch version bumps from `0.11.3` to `0.11.5`; these gems have been
+    yanked.
 
 ## 0.11.5
 
@@ -238,14 +252,14 @@ minification.
   without actually threading, inability to compile to rarer Rust targets, dependency on the Go compiler, maintaining
   a [fork of esbuild](https://github.com/wilsonzlin/esbuild-rs), unsafe FFI, and more. CSS minification is now done
   by [css-minify](https://github.com/Mnwa/css-minify).
-    - As minify-js is a relatively new library, any feedback, suggestions, and issues around JS minification is most
-      welcome! Please report them to [the repo](https://github.com/wilsonzlin/minify-js).
+  - As minify-js is a relatively new library, any feedback, suggestions, and issues around JS minification is most
+    welcome! Please report them to [the repo](https://github.com/wilsonzlin/minify-js).
 - Use [Neon](https://neon-bindings.com/) for the Node.js library instead of custom hand-written N-API bindings in C.
   This simplifies the code and makes it safer and easier to extend. It also allows building from source if a prebuilt
   binary is not available (the Rust compiler must be installed).
-    - The package has been renamed to `@minify-js/node`.
-    - There is a slight API change: instead of calling `createConfiguration`, directly pass the JavaScript object to the
-      `minify` function. The `minify` function also no longer takes a string.
+  - The package has been renamed to `@minify-js/node`.
+  - There is a slight API change: instead of calling `createConfiguration`, directly pass the JavaScript object to the
+    `minify` function. The `minify` function also no longer takes a string.
 - Thanks to the change to the fully-Rust [minify-js](https://github.com/wilsonzlin/minify-js), we can now add support
   for Deno and WebAssembly.
 - Due to the dropping of esbuild, there is no more `core` variant for Node.js and Python, as the issues should no longer
