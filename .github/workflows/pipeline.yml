@@ -1,6 +1,6 @@
 name: pipeline
 
-on: [ push, pull_request ]
+on: [push, pull_request]
 
 jobs:
   check:
@@ -39,16 +39,20 @@ jobs:
     needs: check
     name: Publish Cargo Package
     runs-on: ubuntu-latest
-    env:
-      CRATES_IO_TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
+    environment: release
+    permissions:
+      id-token: write
 
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
 
-      - run: cargo login $CRATES_IO_TOKEN
+      - uses: rust-lang/crates-io-auth-action@v1
+        id: auth
       - run: cargo publish
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
