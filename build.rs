@@ -503,7 +503,7 @@ fn gen_entities_rs() -> String {
                 .iter()
                 .map(|&c| CodePoints::new() & c)
                 .collect_vec(),
-            &format!("EntityType::Named({})", val),
+            &format!("EntityType::Named({val})"),
         );
         // We should encode if encoded is shorter than decoded.
         if encoded.len() < entity.characters.len() {
